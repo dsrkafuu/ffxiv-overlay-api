@@ -18,7 +18,7 @@ export default class RawAPI {
     this.apiStatus = false;
     this.subscribers = {}; // { eventName: callbackFunc }
     // Check if in WebSocket mode
-    this.wsURL = /[\?&]OVERLAY_WS=([^&]+)/.exec(this.url);
+    this.wsURL = /[\?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
     if (this.wsURL) {
       this.ws = null;
       this.responsePromises = {};
@@ -37,13 +37,12 @@ export default class RawAPI {
       return;
     }
     // API loaded
-    let tempQueue = this.queue;
-    this.queue.length = 0;
     this.apiStatus = true;
     // Bind `this` for callback function called by OverlayAPI, otherwist it will turn to `undefined`
     window.__OverlayCallback = this.triggerEvent.bind(this);
     // Send all messages in queue to OverlayPluginApi
-    for (let { obj, cb } of tempQueue) {
+    while (this.queue.length > 0) {
+      let { obj, cb } = this.queue.shift();
       window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
     }
   }
@@ -52,23 +51,23 @@ export default class RawAPI {
    * Init WebSocket connection
    */
   initWS() {
-    ws = new WebSocket(this.wsURL[1]);
+    this.ws = new WebSocket(this.wsURL[1]);
     // Log error
-    ws.addEventListener('error', (e) => {
+    this.ws.addEventListener('error', (e) => {
       console.error(e);
     });
     // Successfully connected WebSocket
-    ws.addEventListener('open', () => {
+    this.ws.addEventListener('open', () => {
       console.log('[API] WebSocket connected');
-      let tempQueue = this.queue;
-      this.queue.length = 0;
+      console.log(this.queue);
       this.apiStatus = true;
-      for (let msg of tempQueue) {
+      while (this.queue.length > 0) {
+        let msg = this.queue.shift();
         this.sendMessage(msg);
       }
     });
     // On message loaded from WebSocket
-    ws.addEventListener('message', (msg) => {
+    this.ws.addEventListener('message', (msg) => {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
@@ -83,7 +82,7 @@ export default class RawAPI {
       }
     });
     // Connection failed
-    ws.addEventListener('close', () => {
+    this.ws.addEventListener('close', () => {
       this.apiStatus = false;
       console.log('[API] Trying to reconnect...');
       // Don't spam the server with retries
@@ -102,7 +101,7 @@ export default class RawAPI {
     if (this.wsURL) {
       if (this.apiStatus) {
         try {
-          ws.send(JSON.stringify(obj));
+          this.ws.send(JSON.stringify(obj));
         } catch (e) {
           console.error('[API] Error stringfy message: ', obj);
           return;
