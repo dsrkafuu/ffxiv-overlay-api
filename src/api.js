@@ -1,11 +1,11 @@
 'use strict';
 
 /**
- * Ported from https://github.com/ngld/OverlayPlugin/blob/master/docs/assets/shared/common.js
+ * Ported and modified from ngld/OverlayPlugin
  * MIT License
  */
 
-export default class OverlayAPI {
+export default class RawAPI {
   /**
    * Init API
    * @constructor
@@ -101,13 +101,23 @@ export default class OverlayAPI {
   sendMessage(obj, cb) {
     if (this.wsURL) {
       if (this.apiStatus) {
-        ws.send(JSON.stringify(obj));
+        try {
+          ws.send(JSON.stringify(obj));
+        } catch (e) {
+          console.error('[API] Error stringfy message: ', obj);
+          return;
+        }
       } else {
         this.queue.push(obj);
       }
     } else {
       if (this.apiStatus) {
-        window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
+        try {
+          window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
+        } catch (e) {
+          console.error('[API] Error stringfy message: ', obj);
+          return;
+        }
       } else {
         this.queue.push({ obj, cb });
       }
@@ -169,9 +179,15 @@ export default class OverlayAPI {
    * @param {Object} msg
    */
   callOverlayHandler(msg) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.sendMessage(msg, (data) => {
-        resolve(data == null ? null : JSON.parse(data));
+        try {
+          const rd = data == null ? null : JSON.parse(data);
+        } catch (e) {
+          console.error('[API] Error stringfy message: ', data);
+          return reject(e);
+        }
+        return resolve(rd);
       });
     });
   }

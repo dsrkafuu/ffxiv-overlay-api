@@ -17,7 +17,7 @@ export default {
     },
     {
       exports: 'auto',
-      name: 'OverlayParser',
+      name: 'OverlayAPI',
       file: pkg.browser,
       format: 'umd',
       plugins: [IS_PROD && terser()],

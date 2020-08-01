@@ -1,3 +1,3 @@
-# ffxiv-overlay-parser
+# ffxiv-overlay-api
 
-Makes building your own modern FFXIV overlay simpler.
+Build your own modern FFXIV overlay with npm.
