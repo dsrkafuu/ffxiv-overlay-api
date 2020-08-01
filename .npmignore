@@ -1,0 +1,6 @@
+test/
+.browserslistrc
+babel.config.js
+index.html
+prettier.config.js
+rollup.config.js

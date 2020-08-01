@@ -1,0 +1,10 @@
+# https://github.com/twbs/bootstrap/blob/main/.browserslistrc
+
+>= 1%
+last 1 major version
+not dead
+Chrome >= 60
+Firefox >= 60
+Edge >= 16
+Safari >= 10
+not Explorer <= 11
