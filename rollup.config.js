@@ -12,7 +12,7 @@ export default {
   output: [
     {
       exports: 'auto',
-      file: pkg.module,
+      file: pkg.main,
       format: 'esm',
     },
     {
