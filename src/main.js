@@ -101,7 +101,7 @@ export default class OverlayAPI {
    * This function allows you to call an overlay handler.
    * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot).
    * Returns a Promise
-   * @param {Object} msg
+   * @param {Object} msg - Message send to OverlayPlugin
    */
   call(msg) {
     return this.api.callOverlayHandler(msg);

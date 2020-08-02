@@ -31,11 +31,13 @@
     "serve": "^11.3.2"
   },
   "scripts": {
+    "pub": "npm publish --access=public",
     "pack:prod": "cross-env NODE_ENV=production rollup -c -m",
     "pack:dev": "cross-env NODE_ENV=production rollup -c -m -w",
     "server": "serve",
     "build": "npm run pack:prod",
     "serve": "npm-run-all -p pack:dev server",
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "publish": "npm-run-all pack:prod pub"
   }
 }
