@@ -4,11 +4,63 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Overlay Demo</title>
-    <script src="./lib/overlay.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        font-family: sans-serif;
+        background-color: white;
+      }
+      .json-formatter-row {
+        font-family: 'Consolas', 'Courier New', 'Courier', monospace !important;
+      }
+    </style>
   </head>
   <body>
+    <main>
+      <h2>Overlay Demo</h2>
+      <h4>Data received:</h4>
+      <div id="data"></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.0/lib/overlay.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
     <script>
-      const overlay = new OverlayAPI();
+      //Init API
+      const overlay = new OverlayAPI({
+        CombatData: [
+          (data) => {
+            console.log('Listener 1 of CombatData', data);
+          },
+          (data) => {
+            console.log('Listener 2 of CombatData', data);
+          },
+        ],
+        ChangeZone: (data) => {
+          console.log('Listener of ChangeZone', data);
+        },
+      });
+      // Add another listener
+      overlay.add('ChangeZone', (data) => {
+        console.log('New listener of ChangeZone', data);
+      });
+      // List all listeners
+      overlay.list();
+      // Remove unused listeners
+      overlay.removeAll('ChangeZone');
+      overlay.removeAll('CombatData');
+      // List all listeners
+      overlay.list();
+
+      // Get data to display
+      overlay.add('CombatData', (data) => {
+        if (document.getElementById('data').childNodes.length > 0) {
+          document.getElementById('data').innerHTML = '';
+        }
+        let formatter = new JSONFormatter(data, 3);
+        document.getElementById('data').appendChild(formatter.render());
+      });
     </script>
   </body>
 </html>

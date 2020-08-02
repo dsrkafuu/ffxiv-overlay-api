@@ -1,5 +1,7 @@
 # ffxiv-overlay-api
 
+![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square) ![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)
+
 Build your own modern FFXIV overlay with npm.
 
 This library needs to be used along with [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin).
@@ -15,7 +17,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.0.0/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.0/lib/overlay.min.js"></script>
 ```
 
 ## Usage
@@ -64,7 +66,7 @@ overlay.add('ChangeZone', (data) => {
 });
 ```
 
-Then put the URL of your overlay into OverlayPlugin, or use the WebSocket. Checkout the [Test](#test) section for example usage.
+Then put the URL of your overlay into OverlayPlugin, or use the WebSocket. Checkout the [index.html](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/index.html) for example usage, you can download this file and load it from the OverlayPlugin.
 
 ## API
 
