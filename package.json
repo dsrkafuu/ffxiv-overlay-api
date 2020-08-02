@@ -33,7 +33,7 @@
   },
   "scripts": {
     "pack:prod": "cross-env NODE_ENV=production rollup -c -m",
-    "pack:dev": "cross-env NODE_ENV=production rollup -c -m -w",
+    "pack:dev": "cross-env NODE_ENV=development rollup -c -m -w",
     "server": "serve",
     "build": "npm run pack:prod",
     "serve": "npm-run-all -p pack:dev server",

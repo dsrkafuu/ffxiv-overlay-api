@@ -66,7 +66,9 @@ overlay.add('ChangeZone', (data) => {
 });
 ```
 
-Then put the URL of your overlay into OverlayPlugin, or use the WebSocket. Checkout the [index.html](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/index.html) for example usage, you can download this file and load it from the OverlayPlugin.
+Then put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` after you overlay URL to access the WebSocket server.
+
+Checkout [Development](#development) section for more details.
 
 ## API
 
@@ -99,6 +101,19 @@ Remove all listener of one event type.
 This function allows you to call an overlay handler. These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot). Returns a Promise.
 
 - `@param {Object} msg` - Message send to OverlayPlugin
+
+## Development
+
+Clone this repo, then:
+
+```bash
+npm install
+npm run serve
+```
+
+You can access the test overlay at `http://localhost:5000/` and `http://localhost:5000/?OVERLAY_WS=ws://127.0.0.1:[port]/ws`.
+
+Remember to run `npm run build` before release commit.
 
 ## Contributon
 
