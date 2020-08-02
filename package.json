@@ -1,6 +1,6 @@
 {
   "name": "ffxiv-overlay-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Build your own modern FFXIV overlay with npm.",
   "keywords": [
     "ffxiv",
@@ -36,7 +36,6 @@
     "pack:dev": "cross-env NODE_ENV=development rollup -c -m -w",
     "server": "serve",
     "build": "npm run pack:prod",
-    "serve": "npm-run-all -p pack:dev server",
-    "test": "node test/test.js"
+    "serve": "npm-run-all -p pack:dev server"
   }
 }

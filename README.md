@@ -72,6 +72,8 @@ Checkout [Development](#development) section for more details.
 
 ## API
 
+You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/event_types>.
+
 ### `OverlayAPI.add(event, cbs)`
 
 Add an event listener.
