@@ -1,6 +1,6 @@
 # ffxiv-overlay-api
 
-![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square) ![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)
+[![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
 
 Build your own modern FFXIV overlay with npm.
 
@@ -8,7 +8,7 @@ This library needs to be used along with [ngld/OverlayPlugin](https://github.com
 
 ## Installation
 
-You can install it from npm registry:
+You can install it from [npm registry](https://www.npmjs.com/package/ffxiv-overlay-api):
 
 ```bash
 npm install ffxiv-overlay-api --save
@@ -74,8 +74,8 @@ Then put the URL of your overlay into OverlayPlugin, or use the WebSocket. Check
 
 Add an event listener.
 
-- @param {String} event - Event to listen
-- @param {Function|Array} cbs - Callback function(s)
+- `@param {String} event` - Event to listen
+- `@param {Function|Array} cbs` - Callback function(s)
 
 ### `OverlayAPI.list()`
 
@@ -85,20 +85,20 @@ List all event listeners.
 
 Remove a listener.
 
-- @param {String} event - Event type which listener belongs to
-- @param {Function|Number} id - Function or number which listener to remove
+- `@param {String} event` - Event type which listener belongs to
+- `@param {Function|Number} id` - Function or number which listener to remove
 
 ### `OverlayAPI.removeAll(event)`
 
 Remove all listener of one event type.
 
-- @param {String} event - Event type which listener belongs to
+- `@param {String} event` - Event type which listener belongs to
 
 ### `OverlayAPI.call(msg)`
 
 This function allows you to call an overlay handler. These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot). Returns a Promise.
 
-- @param {Object} msg - Message send to OverlayPlugin
+- `@param {Object} msg` - Message send to OverlayPlugin
 
 ## Contributon
 
