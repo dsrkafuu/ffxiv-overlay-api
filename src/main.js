@@ -62,13 +62,30 @@ export default class OverlayAPI {
       cb = id;
     } else if (typeof id === 'number') {
       cb = this.listening[event][id];
-      this.listening[event].splice(id, 1);
+      if (cb) {
+        this.listening[event].splice(id, 1);
+      }
     } else {
       console.error('[API] Wrong params:', id);
       return;
     }
     // Remove listener
-    this.api.removeOverlayListener(event, cb);
+    if (cb) {
+      this.api.removeOverlayListener(event, cb);
+    }
+  }
+
+  /**
+   * Remove all listener of one event type
+   * @param {String} event - Event type which listener belongs to
+   */
+  removeAll(event) {
+    if (this.listening[event] && this.listening[event].length > 0) {
+      this.listening[event].forEach((cb) => {
+        this.api.removeOverlayListener(event, cb);
+      });
+      this.listening[event] = [];
+    }
   }
 
   /**
