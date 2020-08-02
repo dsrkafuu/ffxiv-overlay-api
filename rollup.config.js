@@ -3,6 +3,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 
+import path from 'path';
+import license from 'rollup-plugin-license';
+
 import pkg from './package.json';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -23,5 +26,16 @@ export default {
       plugins: [IS_PROD && terser()],
     },
   ],
-  plugins: [resolve({ browser: true }), commonjs(), babel({ babelHelpers: 'runtime' })],
+  plugins: [
+    resolve({ browser: true }),
+    commonjs(),
+    babel({ babelHelpers: 'runtime' }),
+    license({
+      sourcemap: true,
+      banner: {
+        commentStyle: 'ignored',
+        content: { file: path.join(__dirname, 'BANNER'), encoding: 'utf-8' },
+      },
+    }),
+  ],
 };

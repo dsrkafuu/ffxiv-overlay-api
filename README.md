@@ -107,5 +107,7 @@ Please use the `prettier.config.js` at the root of the project along with [Prett
 ## Annotations
 
 - [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin) - MIT License
+- [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
+- [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
 > © 2020 DSRKafuU [Twitter @amzrk2](https://twitter.com/amzrk2) [GitHub @amzrk2](https://github.com/amzrk2)
