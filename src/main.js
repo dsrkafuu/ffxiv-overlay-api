@@ -19,15 +19,7 @@ export default class OverlayAPI {
     for (let event in this.events) {
       let cbs = this.events[event];
       if (cbs) {
-        if (typeof cbs === 'function') {
-          this.add(event, cbs);
-        } else if (Array.isArray(cbs)) {
-          cbs.forEach((cb) => {
-            this.add(event, cb);
-          });
-        } else {
-          console.error('[API] Wrong callback settings in events:', cbs);
-        }
+        this.add(event, cbs);
       }
     }
   }
@@ -35,19 +27,29 @@ export default class OverlayAPI {
   /**
    * Add an event listener
    * @param {String} event - Event to listen
-   * @param {Function} cb - Callback function
+   * @param {Function|Array} cbs - Callback function(s)
    */
-  add(event, cb) {
-    if (typeof cb !== 'function') {
-      console.error('[API] Wrong params:', cb);
+  add(event, cbs) {
+    if (typeof cbs === 'function') {
+      this.api.addOverlayListener(event, cbs);
+      if (!this.listening.hasOwnProperty(event)) {
+        this.listening[event] = [];
+        this.api.startOverlayEvents([event]);
+      }
+      this.listening[event].push(cbs);
+    } else if (Array.isArray(cbs)) {
+      cbs.forEach((f) => {
+        this.api.addOverlayListener(event, f);
+      });
+      if (!this.listening.hasOwnProperty(event)) {
+        this.listening[event] = [];
+        this.api.startOverlayEvents([event]);
+      }
+      this.listening[event].push(...cbs);
+    } else {
+      console.error('[API] Wrong params:', cbs);
       return;
     }
-    this.api.addOverlayListener(event, cb);
-    if (!this.listening.hasOwnProperty(event)) {
-      this.listening[event] = [];
-      this.api.startOverlayEvents([event]);
-    }
-    this.listening[event].push(cb);
   }
 
   /**

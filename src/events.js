@@ -1,19 +1,10 @@
 'use strict';
 
 export default {
-  CombatData: [
-    (data) => {
-      console.log(data.type);
-    },
-    (data) => {
-      console.log(data.isActive);
-    },
-  ],
+  CombatData: null,
   LogLine: null,
   ImportedLogLines: null,
-  ChangeZone: (data) => {
-    console.log(data.type);
-  },
+  ChangeZone: null,
   ChangePrimaryPlayer: null,
   OnlineStatusChanged: null,
 };
