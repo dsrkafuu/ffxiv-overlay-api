@@ -58,8 +58,7 @@ export default class RawAPI {
     });
     // Successfully connected WebSocket
     this.ws.addEventListener('open', () => {
-      console.log('[API] WebSocket connected');
-      console.log(this.queue);
+      console.info('[API] WebSocket connected');
       this.apiStatus = true;
       while (this.queue.length > 0) {
         let msg = this.queue.shift();
@@ -71,7 +70,7 @@ export default class RawAPI {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
-        console.error('[API] Invalid message received: ', msg);
+        console.error('[API] WebSocket invalid message received: ', msg, e);
         return;
       }
       if (msg.rseq !== undefined && this.responsePromises[msg.rseq]) {
@@ -84,7 +83,7 @@ export default class RawAPI {
     // Connection failed
     this.ws.addEventListener('close', () => {
       this.apiStatus = false;
-      console.log('[API] Trying to reconnect...');
+      console.info('[API] WebSocket trying to reconnect...');
       // Don't spam the server with retries
       setTimeout(() => {
         this.initWS();
@@ -103,7 +102,7 @@ export default class RawAPI {
         try {
           this.ws.send(JSON.stringify(obj));
         } catch (e) {
-          console.error('[API] Error stringfy message: ', obj);
+          console.error('[API] Error stringfy message: ', obj, e);
           return;
         }
       } else {
@@ -114,7 +113,7 @@ export default class RawAPI {
         try {
           window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
         } catch (e) {
-          console.error('[API] Error stringfy message: ', obj);
+          console.error('[API] Error stringfy message: ', obj, e);
           return;
         }
       } else {
@@ -158,17 +157,20 @@ export default class RawAPI {
     if (this.subscribers[event]) {
       let list = this.subscribers[event];
       let pos = list.indexOf(cb);
-      if (pos > -1) list.splice(pos, 1);
+      if (pos > -1) {
+        list.splice(pos, 1);
+      }
     }
   }
 
   /**
    * Start listening events
+   * @param {Array} events - Events which to subscribe
    */
-  startOverlayEvents() {
+  startOverlayEvents(events) {
     this.sendMessage({
       call: 'subscribe',
-      events: Object.keys(this.subscribers),
+      events,
     });
   }
 
@@ -183,7 +185,7 @@ export default class RawAPI {
         try {
           const rd = data == null ? null : JSON.parse(data);
         } catch (e) {
-          console.error('[API] Error stringfy message: ', data);
+          console.error('[API] Error stringfy message: ', data, e);
           return reject(e);
         }
         return resolve(rd);
