@@ -1,11 +1,10 @@
-'use strict';
-
 /**
  * Origin api ported from common.js
- * @function initWS
- * @function initAPI
- * @function sendMessage
- * @function triggerEvents
+ * @class
+ * @param {Function} initWS
+ * @param {Function} initAPI
+ * @param {Function} sendMessage
+ * @param {Function} triggerEvents
  */
 
 export default class API {

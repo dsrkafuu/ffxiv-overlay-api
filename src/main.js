@@ -1,16 +1,15 @@
-'use strict';
-
 import e from './events.js';
 import API from './api.js';
 
 /**
- * API public functions
- * @function listenEvents
- * @function add
- * @function remove
- * @function removeAll
- * @function list
- * @function call
+ * Public API class
+ * @class
+ * @param {Function} listenEvents
+ * @param {Function} add
+ * @param {Function} remove
+ * @param {Function} removeAll
+ * @param {Function} list
+ * @param {Function} call
  */
 
 export default class OverlayAPI extends API {

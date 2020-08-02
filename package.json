@@ -1,6 +1,6 @@
 {
   "name": "ffxiv-overlay-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Build your own modern FFXIV overlay with npm.",
   "keywords": [
     "ffxiv",
@@ -11,8 +11,8 @@
   "author": "DSRKafuU <amzrk2@outlook.com> (https://amzrk2.cc)",
   "homepage": "https://github.com/amzrk2/ffxiv-overlay-parser#readme",
   "license": "MIT",
-  "type": "module",
-  "main": "lib/overlay.esm.js",
+  "main": "lib/overlay.cjs.js",
+  "module": "lib/overlay.esm.js",
   "browser": "lib/overlay.min.js",
   "repository": "github:amzrk2/ffxiv-overlay-parser",
   "dependencies": {
