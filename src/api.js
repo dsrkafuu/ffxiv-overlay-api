@@ -21,7 +21,7 @@ export default class API {
     this.apiStatus = false;
     this.subscribers = {}; // { eventName: [callbackFunc] }
     // Check if in WebSocket mode
-    this.wsURL = /[\?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
+    this.wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
     if (this.wsURL) {
       this.ws = null;
       this.responsePromises = {};
