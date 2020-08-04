@@ -1,29 +1,29 @@
+import logger from './logger';
+
 /**
  * Origin api ported from common.js
  * @class
- * @param {Function} initWS
- * @param {Function} initAPI
- * @param {Function} sendMessage
- * @param {Function} triggerEvents
+ * @prop {String} _queue - Message queue before OverlayPluginApi is ready
+ * @prop {Boolean} _status - OverlayPluginApi init status
+ * @prop {String} _wsURL - Web Socket URL if exist
+ * @prop {Object} _ws - Web Socket instance if exist
+ * @prop {Object} _resPromises - Web Socket response promises if exist
+ * @prop {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
  */
-
-export default class API {
+export default class PluginAPI {
   /**
    * Init API
    * @constructor
-   * @param {String} queue - Message queue before OverlayPluginApi is ready
-   * @param {Boolean} apiStatus - OverlayPluginApi init status
-   * @param {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
    */
   constructor() {
-    this.queue = [];
-    this.apiStatus = false;
+    this._queue = []; // { msg, cb } | msg
+    this._status = false;
     this.subscribers = {}; // { eventName: [callbackFunc] }
     // Check if in WebSocket mode
-    this.wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
-    if (this.wsURL) {
-      this.ws = null;
-      this.responsePromises = {};
+    this._wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
+    if (this._wsURL) {
+      this._ws = null;
+      this._resPromises = {};
       this.initWS();
     } else {
       this.initAPI();
@@ -39,13 +39,17 @@ export default class API {
       return;
     }
     // API loaded
-    this.apiStatus = true;
+    this._status = true;
     // Bind `this` for callback function called by OverlayAPI, otherwist it will turn to `undefined`
     window.__OverlayCallback = this.triggerEvents.bind(this);
     // Send all messages in queue to OverlayPluginApi
-    while (this.queue.length > 0) {
-      let { obj, cb } = this.queue.shift();
-      window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
+    while (this._queue.length > 0) {
+      let { msg, cb } = this._queue.shift();
+      try {
+        window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
+      } catch (e) {
+        logger.e(e, msg);
+      }
     }
   }
 
@@ -53,39 +57,39 @@ export default class API {
    * Init WebSocket connection
    */
   initWS() {
-    this.ws = new WebSocket(this.wsURL[1]);
+    this._ws = new WebSocket(this._wsURL[1]);
     // Log error
-    this.ws.addEventListener('error', (e) => {
-      console.error(e);
+    this._ws.addEventListener('error', (e) => {
+      logger.e(e);
     });
     // Successfully connected WebSocket
-    this.ws.addEventListener('open', () => {
-      console.info('[API] WebSocket connected');
-      this.apiStatus = true;
-      while (this.queue.length > 0) {
-        let msg = this.queue.shift();
+    this._ws.addEventListener('open', () => {
+      logger.i('WebSocket connected');
+      this._status = true;
+      while (this._queue.length > 0) {
+        let msg = this._queue.shift();
         this.sendMessage(msg);
       }
     });
     // On message loaded from WebSocket
-    this.ws.addEventListener('message', (msg) => {
+    this._ws.addEventListener('message', (msg) => {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
-        console.error('[API] WebSocket invalid message received: ', msg, e);
+        logger.e(e, msg);
         return;
       }
-      if (msg.rseq !== undefined && this.responsePromises[msg.rseq]) {
-        this.responsePromises[msg.rseq](msg);
-        delete this.responsePromises[msg.rseq];
+      if (msg.rseq !== undefined && this._resPromises[msg.rseq]) {
+        this._resPromises[msg.rseq](msg);
+        delete this._resPromises[msg.rseq];
       } else {
         this.triggerEvents(msg);
       }
     });
     // Connection failed
-    this.ws.addEventListener('close', () => {
-      this.apiStatus = false;
-      console.info('[API] WebSocket trying to reconnect...');
+    this._ws.addEventListener('close', () => {
+      this._status = false;
+      logger.i('WebSocket trying to reconnect...');
       // Don't spam the server with retries
       setTimeout(() => {
         this.initWS();
@@ -95,33 +99,44 @@ export default class API {
 
   /**
    * Send message to OverlayPluginApi or push into queue before its init
-   * @param {Object} obj - Object to send
+   * @param {Object} msg - Object to send
    * @param {Function} cb - Callback function
    */
-  sendMessage(obj, cb) {
-    if (this.wsURL) {
-      if (this.apiStatus) {
+  sendMessage(msg, cb) {
+    if (this._wsURL) {
+      if (this._status) {
         try {
-          this.ws.send(JSON.stringify(obj));
+          this._ws.send(JSON.stringify(msg));
         } catch (e) {
-          console.error('[API] Error stringfy message: ', obj, e);
+          logger.e(e, msg);
           return;
         }
       } else {
-        this.queue.push(obj);
+        this._queue.push(msg);
       }
     } else {
-      if (this.apiStatus) {
+      if (this._status) {
         try {
-          window.OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
+          window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
         } catch (e) {
-          console.error('[API] Error stringfy message: ', obj, e);
+          logger.e(e, msg);
           return;
         }
       } else {
-        this.queue.push({ obj, cb });
+        this._queue.push({ msg, cb });
       }
     }
+  }
+
+  /**
+   * Start listening event
+   * @param {String} event - Event which to subscribe
+   */
+  listenEvent(event) {
+    this.sendMessage({
+      call: 'subscribe',
+      events: [event],
+    });
   }
 
   /**

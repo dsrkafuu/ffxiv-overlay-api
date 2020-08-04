@@ -1,6 +1,6 @@
 # ffxiv-overlay-api
 
-[![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
+[![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/bundlephobia/min/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
 
 Build your own modern FFXIV overlay with npm.
 
@@ -81,16 +81,18 @@ Add an event listener.
 - `@param {String} event` - Event to listen
 - `@param {Function|Array} cbs` - Callback function(s)
 
-### `OverlayAPI.list()`
+### `OverlayAPI.list(event)`
 
-List all event listeners.
+List all listeners of an event.
 
-### `OverlayAPI.remove(event, id)`
+- `@param {String} event` - Event to list listeners
+
+### `OverlayAPI.remove(event, cb)`
 
 Remove a listener.
 
 - `@param {String} event` - Event type which listener belongs to
-- `@param {Function|Number} id` - Function or number which listener to remove
+- `@param {Function|Number} cb` - Function or index number which listener to remove
 
 ### `OverlayAPI.removeAll(event)`
 

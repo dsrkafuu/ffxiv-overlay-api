@@ -1,45 +1,30 @@
-import e from './events.js';
-import API from './plugin.js';
+import logger from './logger';
+import ev from './events.js';
+import PluginAPI from './plugin.js';
 
 /**
  * Public API class
  * @class
- * @param {Function} listenEvents
- * @param {Function} add
- * @param {Function} remove
- * @param {Function} removeAll
- * @param {Function} list
- * @param {Function} call
+ * @extends PluginAPI
+ * @prop {String} _events - Events needs to be init at construct
+ * @extends @prop {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
  */
-
-export default class OverlayAPI extends API {
+export default class OverlayAPI extends PluginAPI {
   /**
    * Init API
    * @constructor
-   * @extends API
-   * @param {Object} events - Events needs to be init at constructor
+   * @param {Object} events - Events needs to be init at construct
    */
   constructor(events = {}) {
     super();
-    this.events = Object.assign({}, e, events);
+    this._events = Object.assign({}, ev, events);
     // Register all events
-    for (let event in this.events) {
-      let cbs = this.events[event];
+    for (let event in this._events) {
+      let cbs = this._events[event];
       if (cbs) {
         this.add(event, cbs);
       }
     }
-  }
-
-  /**
-   * Start listening events
-   * @param {Array} events - Events which to subscribe
-   */
-  listenEvents(events) {
-    this.sendMessage({
-      call: 'subscribe',
-      events,
-    });
   }
 
   /**
@@ -61,37 +46,37 @@ export default class OverlayAPI extends API {
         this.subscribers[event].push(f);
       });
     } else {
-      console.error('[API] Wrong params:', cbs);
+      logger.e('Wrong event callbacks', cbs);
       return;
     }
     // Listen event type
     if (!eventListened) {
-      this.listenEvents([event]);
+      this.listenEvent(event);
     }
   }
 
   /**
    * Remove a listener
    * @param {String} event - Event type which listener belongs to
-   * @param {Function|Number} id - Function or number which listener to remove
+   * @param {Function|Number} cb - Function or number which listener to remove
    */
-  remove(event, id) {
+  remove(event, cb) {
     const eventListened = this.subscribers.hasOwnProperty(event);
     if (eventListened) {
       // Get cb
       let cb;
-      if (typeof id === 'function') {
-        let cbPos = this.subscribers[event].indexOf(id);
+      if (typeof cb === 'function') {
+        let cbPos = this.subscribers[event].indexOf(cb);
         if (cbPos >= 0) {
-          this.subscribers[event].splice(pos, 1);
+          this.subscribers[event].splice(cbPos, 1);
         }
-      } else if (typeof id === 'number') {
-        cb = this.subscribers[event][id];
+      } else if (typeof cb === 'number') {
+        cb = this.subscribers[event][cb];
         if (cb) {
-          this.subscribers[event].splice(id, 1);
+          this.subscribers[event].splice(cb, 1);
         }
       } else {
-        console.error('[API] Wrong params:', id);
+        logger.e('Wrong params', cb);
         return;
       }
     }
@@ -108,10 +93,11 @@ export default class OverlayAPI extends API {
   }
 
   /**
-   * List all event listeners
+   * Get all listeners of a event
+   * @param {String} event - Event type which listener belongs to
    */
-  list() {
-    console.log(this.subscribers);
+  list(event) {
+    return this.subscribers[event] ? this.subscribers[event] : [];
   }
 
   /**
@@ -127,7 +113,7 @@ export default class OverlayAPI extends API {
         try {
           rd = data == null ? null : JSON.parse(data);
         } catch (e) {
-          console.error('[API] Error stringfy message: ', data, e);
+          logger.e(e, data);
           return reject(e);
         }
         return resolve(rd);

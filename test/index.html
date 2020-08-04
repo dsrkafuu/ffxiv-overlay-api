@@ -45,13 +45,13 @@
       overlay.add('ChangeZone', (data) => {
         console.log('New listener of ChangeZone', data);
       });
-      // List all listeners
-      overlay.list();
+      // List ChangeZone listeners
+      overlay.list('ChangeZone');
       // Remove unused listeners
       overlay.removeAll('ChangeZone');
       overlay.removeAll('CombatData');
-      // List all listeners
-      overlay.list();
+      // List CombatData listeners
+      overlay.list('CombatData');
 
       // Get data to display
       overlay.add('CombatData', (data) => {
