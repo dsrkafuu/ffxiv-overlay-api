@@ -1,7 +1,6 @@
 test/
+.babelrc
 .browserslistrc
-babel.config.js
-index.html
-prettier.config.js
+.licenserc
+.prettierrc
 rollup.config.js
-BANNER

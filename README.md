@@ -110,10 +110,10 @@ Clone this repo, then:
 
 ```bash
 npm install
-npm run serve
+npm start
 ```
 
-You can access the test overlay at `http://localhost:5000/` and `http://localhost:5000/?OVERLAY_WS=ws://127.0.0.1:[port]/ws`.
+You can access the test overlay at `http://localhost:5000/test/` and `http://localhost:5000/test/?OVERLAY_WS=ws://127.0.0.1:[port]/ws`.
 
 Remember to run `npm run build` before release commit.
 

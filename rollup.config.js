@@ -2,26 +2,22 @@ import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
-
 import path from 'path';
 import license from 'rollup-plugin-license';
-
+import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 export default {
-  input: './src/main.js',
+  input: './src/index.js',
   output: [
     {
       exports: 'auto',
+      name: 'OverlayAPI',
       file: pkg.main,
-      format: 'cjs',
-    },
-    {
-      exports: 'auto',
-      file: pkg.module,
-      format: 'esm',
+      format: 'umd',
+      sourcemap: true,
     },
     {
       exports: 'auto',
@@ -29,6 +25,13 @@ export default {
       file: pkg.browser,
       format: 'umd',
       plugins: [IS_PROD && terser()],
+      sourcemap: false,
+    },
+    {
+      exports: 'auto',
+      file: pkg.module,
+      format: 'esm',
+      sourcemap: true,
     },
   ],
   plugins: [
@@ -39,8 +42,11 @@ export default {
       sourcemap: true,
       banner: {
         commentStyle: 'ignored',
-        content: { file: path.join(__dirname, 'BANNER'), encoding: 'utf-8' },
+        content: { file: path.join(__dirname, '.licenserc'), encoding: 'utf-8' },
       },
+    }),
+    copy({
+      targets: [{ src: 'src/index.d.ts', dest: 'lib/' }],
     }),
   ],
 };

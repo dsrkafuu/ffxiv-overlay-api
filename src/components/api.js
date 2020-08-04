@@ -1,5 +1,5 @@
 import e from './events.js';
-import API from './api.js';
+import API from './plugin.js';
 
 /**
  * Public API class
