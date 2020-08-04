@@ -20,7 +20,7 @@ export default class OverlayAPI extends PluginAPI {
     this._events = events;
     // Register all events
     for (let event in this._events) {
-      if (!ev.includes(event)) {
+      if (ev.includes(event)) {
         let cbs = this._events[event];
         if (cbs) {
           this.add(event, cbs);
@@ -35,7 +35,7 @@ export default class OverlayAPI extends PluginAPI {
    * @param {Function|Array} cbs - Callback function(s)
    */
   add(event, cbs) {
-    if (!ev.includes(event)) {
+    if (ev.includes(event)) {
       const eventListened = this.subscribers.hasOwnProperty(event);
       // Init event array
       if (!eventListened) {

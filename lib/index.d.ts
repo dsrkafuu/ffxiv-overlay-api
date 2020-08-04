@@ -4,24 +4,20 @@ export = OverlayAPI;
 
 declare class OverlayAPI {
   constructor(events?: OverlayAPI.Events);
-  add(event: string, cbs: OverlayAPI.CallbackMixed): void;
-  remove(event: string, cb: OverlayAPI.Callback | number): void;
+  add(event: string, cbs: ((data: object) => any) | ((data: object) => any)[]): void;
+  remove(event: string, cb: ((data: object) => any) | number): void;
   removeAll(event: string): void;
-  list(event: string): OverlayAPI.CallbackArray;
+  list(event: string): ((data: object) => any)[];
   call(msg: object): Promise<object>;
 }
 
 declare namespace OverlayAPI {
-  export type Callback = (data: object) => any;
-  export type CallbackArray = ((data: object) => any)[];
-  export type CallbackMixed = Callback | CallbackArray;
-
   export interface Events {
-    CombatData?: CallbackMixed;
-    LogLine?: CallbackMixed;
-    ImportedLogLines?: CallbackMixed;
-    ChangeZone?: CallbackMixed;
-    ChangePrimaryPlayer?: CallbackMixed;
-    OnlineStatusChanged?: CallbackMixed;
+    CombatData?: ((data: object) => any) | ((data: object) => any)[];
+    LogLine?: ((data: object) => any) | ((data: object) => any)[];
+    ImportedLogLines?: ((data: object) => any) | ((data: object) => any)[];
+    ChangeZone?: ((data: object) => any) | ((data: object) => any)[];
+    ChangePrimaryPlayer?: ((data: object) => any) | ((data: object) => any)[];
+    OnlineStatusChanged?: ((data: object) => any) | ((data: object) => any)[];
   }
 }
