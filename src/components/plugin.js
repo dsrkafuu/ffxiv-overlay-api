@@ -7,7 +7,6 @@ import log from './log';
  * @prop {Boolean} _status - OverlayPluginApi init status
  * @prop {String} _wsURL - Web Socket URL if exist
  * @prop {Object} _ws - Web Socket instance if exist
- * @prop {Object} _resPromises - Web Socket response promises if exist
  * @prop {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
  */
 export default class PluginAPI {
@@ -23,7 +22,6 @@ export default class PluginAPI {
     this._wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
     if (this._wsURL) {
       this._ws = null;
-      this._resPromises = {};
       this.initWS();
     } else {
       this.initAPI();
@@ -79,12 +77,7 @@ export default class PluginAPI {
         log.error('Error stringify JSON', e, msg);
         return;
       }
-      if (msg.rseq !== undefined && this._resPromises[msg.rseq]) {
-        this._resPromises[msg.rseq](msg);
-        delete this._resPromises[msg.rseq];
-      } else {
-        this.triggerEvents(msg);
-      }
+      this.triggerEvents(msg);
     });
     // Connection failed
     this._ws.addEventListener('close', () => {
