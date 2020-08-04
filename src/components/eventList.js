@@ -1,3 +1,6 @@
+/**
+ * All event types available
+ */
 export default [
   'CombatData',
   'LogLine',

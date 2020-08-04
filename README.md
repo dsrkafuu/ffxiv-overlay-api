@@ -123,7 +123,7 @@ Remember to run `npm run build` before release commit.
 
 ## Contributon
 
-Please use the `prettier.config.js` at the root of the project along with [Prettier default settings](https://prettier.io/docs/en/options.html) to format your code.
+Please use the `.prettierrc` at the root of the project along with [Prettier default settings](https://prettier.io/docs/en/options.html) to format your code.
 
 ## Annotations
 

@@ -1,6 +1,6 @@
 import log from './log';
-import ev from './events.js';
-import PluginAPI from './plugin.js';
+import eventList from './eventList';
+import PluginAPI from './plugin';
 
 /**
  * Public API class
@@ -20,7 +20,7 @@ export default class OverlayAPI extends PluginAPI {
     this._events = events;
     // Register all events
     for (let event in this._events) {
-      if (ev.includes(event)) {
+      if (eventList.includes(event)) {
         let cbs = this._events[event];
         if (cbs) {
           this.add(event, cbs);
@@ -35,7 +35,7 @@ export default class OverlayAPI extends PluginAPI {
    * @param {Function|Array} cbs - Callback function(s)
    */
   add(event, cbs) {
-    if (ev.includes(event)) {
+    if (eventList.includes(event)) {
       const eventListened = this.subscribers.hasOwnProperty(event);
       // Init event array
       if (!eventListened) {
@@ -49,7 +49,7 @@ export default class OverlayAPI extends PluginAPI {
           this.subscribers[event].push(f);
         });
       } else {
-        log.error('add() wrong event callbacks', cbs);
+        log.error('Function add(event, cbs) wrong event callbacks', cbs);
         return;
       }
       // Listen event type
@@ -78,7 +78,7 @@ export default class OverlayAPI extends PluginAPI {
           this.subscribers[event].splice(cb, 1);
         }
       } else {
-        log.error('remove() wrong params', cb);
+        log.error('Function remove(event, cb) wrong params', cb);
         return;
       }
     }

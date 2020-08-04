@@ -1,3 +1,6 @@
+/**
+ * Console logger
+ */
 export default {
   info(...params) {
     console.info('[OverlayAPI]', ...params);
