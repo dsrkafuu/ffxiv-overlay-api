@@ -1,4 +1,4 @@
-import logger from './logger';
+import log from './log';
 import ev from './events.js';
 import PluginAPI from './plugin.js';
 
@@ -17,12 +17,14 @@ export default class OverlayAPI extends PluginAPI {
    */
   constructor(events = {}) {
     super();
-    this._events = Object.assign({}, ev, events);
+    this._events = events;
     // Register all events
     for (let event in this._events) {
-      let cbs = this._events[event];
-      if (cbs) {
-        this.add(event, cbs);
+      if (!ev.includes(event)) {
+        let cbs = this._events[event];
+        if (cbs) {
+          this.add(event, cbs);
+        }
       }
     }
   }
@@ -33,25 +35,27 @@ export default class OverlayAPI extends PluginAPI {
    * @param {Function|Array} cbs - Callback function(s)
    */
   add(event, cbs) {
-    const eventListened = this.subscribers.hasOwnProperty(event);
-    // Init event array
-    if (!eventListened) {
-      this.subscribers[event] = [];
-    }
-    // Push events
-    if (typeof cbs === 'function') {
-      this.subscribers[event].push(cbs);
-    } else if (Array.isArray(cbs)) {
-      cbs.forEach((f) => {
-        this.subscribers[event].push(f);
-      });
-    } else {
-      logger.e('Wrong event callbacks', cbs);
-      return;
-    }
-    // Listen event type
-    if (!eventListened) {
-      this.listenEvent(event);
+    if (!ev.includes(event)) {
+      const eventListened = this.subscribers.hasOwnProperty(event);
+      // Init event array
+      if (!eventListened) {
+        this.subscribers[event] = [];
+      }
+      // Push events
+      if (typeof cbs === 'function') {
+        this.subscribers[event].push(cbs);
+      } else if (Array.isArray(cbs)) {
+        cbs.forEach((f) => {
+          this.subscribers[event].push(f);
+        });
+      } else {
+        log.error('add() wrong event callbacks', cbs);
+        return;
+      }
+      // Listen event type
+      if (!eventListened) {
+        this.listenEvent(event);
+      }
     }
   }
 
@@ -63,8 +67,6 @@ export default class OverlayAPI extends PluginAPI {
   remove(event, cb) {
     const eventListened = this.subscribers.hasOwnProperty(event);
     if (eventListened) {
-      // Get cb
-      let cb;
       if (typeof cb === 'function') {
         let cbPos = this.subscribers[event].indexOf(cb);
         if (cbPos >= 0) {
@@ -76,7 +78,7 @@ export default class OverlayAPI extends PluginAPI {
           this.subscribers[event].splice(cb, 1);
         }
       } else {
-        logger.e('Wrong params', cb);
+        log.error('remove() wrong params', cb);
         return;
       }
     }
@@ -113,7 +115,7 @@ export default class OverlayAPI extends PluginAPI {
         try {
           rd = data == null ? null : JSON.parse(data);
         } catch (e) {
-          logger.e(e, data);
+          log.error('Error parse JSON', e, data);
           return reject(e);
         }
         return resolve(rd);

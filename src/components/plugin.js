@@ -1,4 +1,4 @@
-import logger from './logger';
+import log from './log';
 
 /**
  * Origin api ported from common.js
@@ -48,7 +48,7 @@ export default class PluginAPI {
       try {
         window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
       } catch (e) {
-        logger.e(e, msg);
+        log.error('Error stringify JSON', e, msg);
       }
     }
   }
@@ -60,11 +60,11 @@ export default class PluginAPI {
     this._ws = new WebSocket(this._wsURL[1]);
     // Log error
     this._ws.addEventListener('error', (e) => {
-      logger.e(e);
+      log.error('WebSocket error', e);
     });
     // Successfully connected WebSocket
     this._ws.addEventListener('open', () => {
-      logger.i('WebSocket connected');
+      log.info('WebSocket connected');
       this._status = true;
       while (this._queue.length > 0) {
         let msg = this._queue.shift();
@@ -76,7 +76,7 @@ export default class PluginAPI {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
-        logger.e(e, msg);
+        log.error('Error stringify JSON', e, msg);
         return;
       }
       if (msg.rseq !== undefined && this._resPromises[msg.rseq]) {
@@ -89,7 +89,7 @@ export default class PluginAPI {
     // Connection failed
     this._ws.addEventListener('close', () => {
       this._status = false;
-      logger.i('WebSocket trying to reconnect...');
+      log.info('WebSocket trying to reconnect...');
       // Don't spam the server with retries
       setTimeout(() => {
         this.initWS();
@@ -108,7 +108,7 @@ export default class PluginAPI {
         try {
           this._ws.send(JSON.stringify(msg));
         } catch (e) {
-          logger.e(e, msg);
+          log.error('Error stringify JSON', e, msg);
           return;
         }
       } else {
@@ -119,7 +119,7 @@ export default class PluginAPI {
         try {
           window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
         } catch (e) {
-          logger.e(e, msg);
+          log.error('Error stringify JSON', e, msg);
           return;
         }
       } else {
