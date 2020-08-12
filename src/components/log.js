@@ -1,11 +1,13 @@
 /**
- * Console logger
+ * Console info logger
  */
-export default {
-  info(...params) {
-    console.info('[OverlayAPI]', ...params);
-  },
-  error(...params) {
-    console.error('[OverlayAPI]', ...params);
-  },
-};
+export function logInfo(...params) {
+  console.info('[OverlayAPI]', ...params);
+}
+
+/**
+ * Console error logger
+ */
+export function logError(...params) {
+  console.error('[OverlayAPI]', ...params);
+}

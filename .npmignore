@@ -1,7 +1,0 @@
-src/
-test/
-.babelrc
-.browserslistrc
-.licenserc
-.prettierrc
-rollup.config.js
