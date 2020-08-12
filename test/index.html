@@ -28,33 +28,18 @@
     <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
     <script>
       //Init API
-      const overlay = new OverlayAPI({
-        CombatData: [
-          (data) => {
-            console.log('Listener 1 of CombatData', data);
-          },
-          (data) => {
-            console.log('Listener 2 of CombatData', data);
-          },
-        ],
-        ChangeZone: (data) => {
-          console.log('Listener of ChangeZone', data);
-        },
-      });
-      // Add another listener
-      overlay.add('ChangeZone', (data) => {
+      const overlay = new OverlayAPI();
+      // Add listener
+      overlay.addListener('ChangeZone', (data) => {
         console.log('New listener of ChangeZone', data);
       });
       // List ChangeZone listeners
-      overlay.list('ChangeZone');
+      overlay.listListener('ChangeZone');
       // Remove unused listeners
-      overlay.removeAll('ChangeZone');
-      overlay.removeAll('CombatData');
-      // List CombatData listeners
-      overlay.list('CombatData');
+      overlay.removeAllListener('ChangeZone');
 
       // Get data to display
-      overlay.add('CombatData', (data) => {
+      overlay.addListener('CombatData', (data) => {
         if (document.getElementById('data').childNodes.length > 0) {
           document.getElementById('data').innerHTML = '';
         }

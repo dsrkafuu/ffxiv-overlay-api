@@ -17,7 +17,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.0/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.1/lib/overlay.min.js"></script>
 ```
 
 ## Usage
@@ -31,38 +31,23 @@ const overlay = new OverlayAPI();
 
 Note that this library only works in browser.
 
-You can pass your event listeners to constructor, each event type can receive a function or an array:
+You can also pass options to constructor:
 
 ```js
 const overlay = new OverlayAPI({
-  CombatData: [
-    (data) => {
-      console.log('Listener 1 of CombatData', data);
-    },
-    (data) => {
-      console.log('Listener 2 of CombatData', data);
-    },
-  ],
-  ChangeZone: (data) => {
-    console.log('Listener of ChangeZone', data);
-  },
+  liteMode: true,
 });
 ```
 
-You can also add them later. Different from origin library, you can add or remove listeners whenever you want without calling `startOverlayEvents()`.
+Then you can add listeners. Different from origin library, you can add or remove listeners whenever you want without calling `startOverlayEvents()`.
 
 ```js
 const overlay = new OverlayAPI();
-overlay.add('CombatData', [
-  (data) => {
-    console.log('Listener 1 of CombatData', data);
-  },
-  (data) => {
-    console.log('Listener 2 of CombatData', data);
-  },
-]);
-overlay.add('ChangeZone', (data) => {
-  console.log('Listener 1 of CombatData', data);
+overlay.addListener('CombatData', (data) => {
+  console.log('Listener of CombatData', data);
+});
+overlay.addListener('ChangeZone', (data) => {
+  console.log('Listener of ChangeZone', data);
 });
 ```
 
@@ -76,37 +61,37 @@ Checkout [Development](#development) section for more details.
 
 You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/event_types>.
 
-### `OverlayAPI.add(event, cbs)`
+### `OverlayAPI.addListener(event, cb)`
 
 Add an event listener.
 
-- `@param {String} event` - Event to listen
-- `@param {Function|Array} cbs` - Callback function(s)
+- `@param {String} event` Event to listen
+- `@param {Function} cb` Callback function
 
-### `OverlayAPI.list(event)`
+### `OverlayAPI.listListener(event)`
 
 List all listeners of an event.
 
-- `@param {String} event` - Event to list listeners
+- `@param {String} event` Event to list listeners
 
-### `OverlayAPI.remove(event, cb)`
+### `OverlayAPI.removeListener(event, cb)`
 
 Remove a listener.
 
-- `@param {String} event` - Event type which listener belongs to
-- `@param {Function|Number} cb` - Function or index number which listener to remove
+- `@param {String} event` Event type which listener belongs to
+- `@param {Function} cb` Function of which listener to remove
 
-### `OverlayAPI.removeAll(event)`
+### `OverlayAPI.removeAllListener(event)`
 
 Remove all listener of one event type.
 
-- `@param {String} event` - Event type which listener belongs to
+- `@param {String} event` Event type which listener belongs to
 
 ### `OverlayAPI.call(msg)`
 
 This function allows you to call an overlay handler. These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot). Returns a Promise.
 
-- `@param {Object} msg` - Message send to OverlayPlugin
+- `@param {Object} msg` Message send to OverlayPlugin
 
 ## Development
 
@@ -131,4 +116,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> © 2020 DSRKafuU [Twitter @amzrk2](https://twitter.com/amzrk2) [GitHub @amzrk2](https://github.com/amzrk2)
+> © 2020 DSRKafuU [Twitter @amzrk2](https://twitter.com/amzrk2)
