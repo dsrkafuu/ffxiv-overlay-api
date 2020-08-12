@@ -81,6 +81,18 @@ export default class OverlayAPI extends PluginAPI {
   }
 
   /**
+   * Ends current encounter and save it
+   * Returns a Promise
+   */
+  endEncounter() {
+    if (this._status) {
+      return window.OverlayPluginApi.endEncounter();
+    } else {
+      return Promise.reject('[OverlayAPI] Plugin not ready yet');
+    }
+  }
+
+  /**
    * This function allows you to call an overlay handler
    * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot)
    * Returns a Promise

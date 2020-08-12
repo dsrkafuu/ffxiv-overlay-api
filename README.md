@@ -87,6 +87,10 @@ Remove all listener of one event type.
 
 - `@param {String} event` Event type which listener belongs to
 
+### `OverlayAPI.endEncounter()`
+
+Ends current encounter and save it. Returns a Promise.
+
 ### `OverlayAPI.call(msg)`
 
 This function allows you to call an overlay handler. These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot). Returns a Promise.
