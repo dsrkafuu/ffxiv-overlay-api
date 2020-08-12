@@ -1,4 +1,5 @@
 import { logInfo, logError } from './logger';
+import parseData from './parser';
 
 /**
  * Origin api ported from common.js
@@ -13,8 +14,9 @@ export default class PluginAPI {
   /**
    * Init API
    * @constructor
+   * @param {Object} options
    */
-  constructor() {
+  constructor(options) {
     this._status = false;
     this._queue = []; // Data structure: [{ msg, cb }] (normal) | [msg] (ws)
     this.subscribers = {}; // Data structure: { event: [cb] }
@@ -142,7 +144,11 @@ export default class PluginAPI {
     if (this.subscribers[msg.type]) {
       // Trigger all event's callback
       for (let cb of this.subscribers[msg.type]) {
-        cb(msg);
+        if (options.liteMode) {
+          cb(parseData(msg));
+        } else {
+          cb(msg);
+        }
       }
     }
   }
