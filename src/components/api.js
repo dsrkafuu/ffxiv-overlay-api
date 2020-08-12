@@ -1,70 +1,53 @@
-import log from './log';
-import eventList from './eventList';
+import { logInfo, logError } from './logger';
+import defaultOptions from './options';
 import PluginAPI from './plugin';
 
 /**
  * Public API class
  * @class
  * @extends PluginAPI
- * @prop {String} _events - Events needs to be init at construct
- * @extends @prop {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
+ * @extends @prop {Object} subscribers All subscribers for events emitted by OverlayPlugin
  */
 export default class OverlayAPI extends PluginAPI {
   /**
    * Init API
    * @constructor
-   * @param {Object} events - Events needs to be init at construct
+   * @param {Object} options Options
    */
-  constructor(events = {}) {
+  constructor(options = defaultOptions) {
     super();
-    this._events = events;
-    // Register all events
-    for (let event in this._events) {
-      if (eventList.includes(event)) {
-        let cbs = this._events[event];
-        if (cbs) {
-          this.add(event, cbs);
-        }
-      }
-    }
   }
 
   /**
    * Add an event listener
-   * @param {String} event - Event to listen
-   * @param {Function|Array} cbs - Callback function(s)
+   * @param {String} event Event to listen
+   * @param {Function} cb Callback function
    */
-  add(event, cbs) {
-    if (eventList.includes(event)) {
-      const eventListened = this.subscribers.hasOwnProperty(event);
-      // Init event array
-      if (!eventListened) {
-        this.subscribers[event] = [];
-      }
-      // Push events
-      if (typeof cbs === 'function') {
-        this.subscribers[event].push(cbs);
-      } else if (Array.isArray(cbs)) {
-        cbs.forEach((f) => {
-          this.subscribers[event].push(f);
-        });
-      } else {
-        log.error('Function add(event, cbs) wrong event callbacks', cbs);
-        return;
-      }
-      // Listen event type
-      if (!eventListened) {
-        this.listenEvent(event);
-      }
+  addListener(event, cb) {
+    const eventListened = this.subscribers.hasOwnProperty(event);
+    // Init event array
+    if (!eventListened) {
+      this.subscribers[event] = [];
+    }
+    // Push events
+    if (typeof cb === 'function') {
+      this.subscribers[event].push(cb);
+    } else {
+      logError('Function add(event, cb) wrong event callbacks', cb);
+      return;
+    }
+    // Listen event type
+    if (!eventListened) {
+      this.listenEvent(event);
     }
   }
 
   /**
    * Remove a listener
-   * @param {String} event - Event type which listener belongs to
-   * @param {Function|Number} cb - Function or number which listener to remove
+   * @param {String} event Event type which listener belongs to
+   * @param {Function} cb Function which listener to remove
    */
-  remove(event, cb) {
+  removeListener(event, cb) {
     const eventListened = this.subscribers.hasOwnProperty(event);
     if (eventListened) {
       if (typeof cb === 'function') {
@@ -72,13 +55,8 @@ export default class OverlayAPI extends PluginAPI {
         if (cbPos >= 0) {
           this.subscribers[event].splice(cbPos, 1);
         }
-      } else if (typeof cb === 'number') {
-        cb = this.subscribers[event][cb];
-        if (cb) {
-          this.subscribers[event].splice(cb, 1);
-        }
       } else {
-        log.error('Function remove(event, cb) wrong params', cb);
+        logError('Function remove(event, cb) wrong params', cb);
         return;
       }
     }
@@ -86,9 +64,9 @@ export default class OverlayAPI extends PluginAPI {
 
   /**
    * Remove all listener of one event type
-   * @param {String} event - Event type which listener belongs to
+   * @param {String} event Event type which listener belongs to
    */
-  removeAll(event) {
+  removeAllListener(event) {
     if (this.subscribers[event] && this.subscribers[event].length > 0) {
       this.subscribers[event] = [];
     }
@@ -96,17 +74,17 @@ export default class OverlayAPI extends PluginAPI {
 
   /**
    * Get all listeners of a event
-   * @param {String} event - Event type which listener belongs to
+   * @param {String} event Event type which listener belongs to
    */
-  list(event) {
+  listListener(event) {
     return this.subscribers[event] ? this.subscribers[event] : [];
   }
 
   /**
-   * This function allows you to call an overlay handler.
-   * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot).
+   * This function allows you to call an overlay handler
+   * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot)
    * Returns a Promise
-   * @param {Object} msg - Message send to OverlayPlugin
+   * @param {Object} msg Message send to OverlayPlugin
    */
   call(msg) {
     return new Promise((resolve, reject) => {
@@ -115,7 +93,7 @@ export default class OverlayAPI extends PluginAPI {
         try {
           rd = data == null ? null : JSON.parse(data);
         } catch (e) {
-          log.error('Error parse JSON', e, data);
+          logError('Error parse JSON', e, data);
           return reject(e);
         }
         return resolve(rd);

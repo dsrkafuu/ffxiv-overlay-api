@@ -1,13 +1,13 @@
-import log from './log';
+import { logInfo, logError } from './logger';
 
 /**
  * Origin api ported from common.js
  * @class
- * @prop {String} _queue - Message queue before OverlayPluginApi is ready
- * @prop {Boolean} _status - OverlayPluginApi init status
- * @prop {String} _wsURL - Web Socket URL if exist
- * @prop {Object} _ws - Web Socket instance if exist
- * @prop {Object} subscribers - All subscribers for events emitted by OverlayPluginApi
+ * @prop {String} _queue Message queue before OverlayPlugin is ready
+ * @prop {Boolean} _status OverlayPlugin init status
+ * @prop {String} _wsURL Web Socket URL if exist
+ * @prop {Object} _ws Web Socket instance if exist
+ * @prop {Object} subscribers All subscribers for events emitted by OverlayPlugin
  */
 export default class PluginAPI {
   /**
@@ -15,9 +15,9 @@ export default class PluginAPI {
    * @constructor
    */
   constructor() {
-    this._queue = []; // { msg, cb } | msg
     this._status = false;
-    this.subscribers = {}; // { eventName: [callbackFunc] }
+    this._queue = []; // Data structure: [{ msg, cb }] (normal) | [msg] (ws)
+    this.subscribers = {}; // Data structure: { event: [cb] }
     // Check if in WebSocket mode
     this._wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
     if (this._wsURL) {
@@ -33,20 +33,20 @@ export default class PluginAPI {
    */
   initAPI() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
-      setTimeout(this.initAPI, 200);
+      setTimeout(this.initAPI, 300);
       return;
     }
     // API loaded
     this._status = true;
-    // Bind `this` for callback function called by OverlayAPI, otherwist it will turn to `undefined`
+    // Bind `this` for callback function called by OverlayAPI
     window.__OverlayCallback = this.triggerEvents.bind(this);
-    // Send all messages in queue to OverlayPluginApi
+    // Send all messages in queue to OverlayPlugin
     while (this._queue.length > 0) {
       let { msg, cb } = this._queue.shift();
       try {
         window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
       } catch (e) {
-        log.error('Error stringify JSON', e, msg);
+        logError('Error stringify JSON', e, msg);
       }
     }
   }
@@ -58,12 +58,13 @@ export default class PluginAPI {
     this._ws = new WebSocket(this._wsURL[1]);
     // Log error
     this._ws.addEventListener('error', (e) => {
-      log.error('WebSocket error', e);
+      logError('WebSocket error', e);
     });
     // Successfully connected WebSocket
     this._ws.addEventListener('open', () => {
-      log.info('WebSocket connected');
+      logInfo('WebSocket connected');
       this._status = true;
+      // Send all messages in queue to OverlayPlugin
       while (this._queue.length > 0) {
         let msg = this._queue.shift();
         this.sendMessage(msg);
@@ -74,7 +75,7 @@ export default class PluginAPI {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
-        log.error('Error stringify JSON', e, msg);
+        logError('Error stringify JSON', e, msg);
         return;
       }
       this.triggerEvents(msg);
@@ -82,18 +83,18 @@ export default class PluginAPI {
     // Connection failed
     this._ws.addEventListener('close', () => {
       this._status = false;
-      log.info('WebSocket trying to reconnect...');
+      logInfo('WebSocket trying to reconnect...');
       // Don't spam the server with retries
       setTimeout(() => {
         this.initWS();
-      }, 200);
+      }, 300);
     });
   }
 
   /**
    * Send message to OverlayPluginApi or push into queue before its init
-   * @param {Object} msg - Object to send
-   * @param {Function} cb - Callback function
+   * @param {Object} msg Object to send
+   * @param {Function} cb Callback function
    */
   sendMessage(msg, cb) {
     if (this._wsURL) {
@@ -101,7 +102,7 @@ export default class PluginAPI {
         try {
           this._ws.send(JSON.stringify(msg));
         } catch (e) {
-          log.error('Error stringify JSON', e, msg);
+          logError('Error stringify JSON', e, msg);
           return;
         }
       } else {
@@ -112,7 +113,7 @@ export default class PluginAPI {
         try {
           window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
         } catch (e) {
-          log.error('Error stringify JSON', e, msg);
+          logError('Error stringify JSON', e, msg);
           return;
         }
       } else {
@@ -123,7 +124,7 @@ export default class PluginAPI {
 
   /**
    * Start listening event
-   * @param {String} event - Event which to subscribe
+   * @param {String} event Event which to subscribe
    */
   listenEvent(event) {
     this.sendMessage({
@@ -134,7 +135,7 @@ export default class PluginAPI {
 
   /**
    * Trigger event function, called by OverlayPluginApi, need `this` binding
-   * @param {Object} msg - Data from OverlayPluginApi
+   * @param {Object} msg Data from OverlayPluginApi
    */
   triggerEvents(msg) {
     // If this event type has subscribers
