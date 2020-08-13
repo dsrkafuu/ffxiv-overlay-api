@@ -28,7 +28,9 @@
     <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
     <script>
       //Init API
-      const overlay = new OverlayAPI();
+      const overlay = new OverlayAPI({
+        liteMode: true,
+      });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
         console.log('New listener of ChangeZone', data);
@@ -45,6 +47,7 @@
         }
         let formatter = new JSONFormatter(data, 3);
         document.getElementById('data').appendChild(formatter.render());
+        console.log(data);
       });
     </script>
   </body>

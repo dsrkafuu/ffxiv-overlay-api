@@ -1,4 +1,4 @@
-import { logError } from './components/logger';
+import { logInfo, logError } from './components/logger';
 import defaultOptions from './components/options';
 import PluginAPI from './components/plugin';
 
@@ -16,6 +16,11 @@ export default class OverlayAPI extends PluginAPI {
    */
   constructor(options = defaultOptions) {
     super(options);
+    if (options.liteMode) {
+      logInfo('Working in lite mode');
+    } else {
+      logInfo('Working in raw mode');
+    }
   }
 
   /**
