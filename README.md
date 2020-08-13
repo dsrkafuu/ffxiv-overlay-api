@@ -17,7 +17,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@2.0/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@2.0.1/lib/overlay.min.js"></script>
 ```
 
 ## Usage
@@ -36,7 +36,6 @@ You can also pass options to constructor:
 ```js
 const overlay = new OverlayAPI({
   liteMode: true,
-  simulateData: false,
 });
 ```
 
@@ -55,6 +54,12 @@ overlay.addListener('ChangeZone', (data) => {
 Then put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` after you overlay URL to access the WebSocket server.
 
 Checkout [Development](#development) section for more details.
+
+## Options
+
+|   Option   | Default |                    Description                    |
+| :--------: | :-----: | :-----------------------------------------------: |
+| `liteMode` | `false` | Parse and return cleaner data object to listeners |
 
 ## API
 
@@ -92,9 +97,11 @@ Switch data simulation.
 
 - `@param {Boolean} status` Simulate status
 
-### `OverlayAPI.simulateData(status)`
+### `OverlayAPI.simulateData(fakeData)`
 
-Ends current encounter and save it. Returns a Promise.
+Pass some fake data object to start simulation, or set `fakeData` to `false` to disable simulation.
+
+- `@param {Object|Boolean} fakeData` Simulation fake combat data object like <https://github.com/amzrk2/ffxiv-overlay-api/blob/master/test/fake.json> or `false`
 
 ### `OverlayAPI.call(msg)`
 

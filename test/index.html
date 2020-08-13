@@ -30,7 +30,6 @@
       //Init API
       const overlay = new OverlayAPI({
         liteMode: true,
-        simulateData: false,
       });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
@@ -41,18 +40,27 @@
       // Remove unused listeners
       overlay.removeAllListener('ChangeZone');
 
-      // Get data to display
+      // Pass some fake data for development simulation
+      fetch('./fake_cn.json')
+        .then((response) => {
+          return response.json();
+        })
+        .then((fakeData) => {
+          overlay.simulateData(fakeData);
+          setTimeout(() => {
+            // Disable simulation
+            overlay.simulateData(false);
+          }, 5000);
+        });
+
+      // Add listener to get real data to display
       overlay.addListener('CombatData', (data) => {
         if (document.getElementById('data').childNodes.length > 0) {
           document.getElementById('data').innerHTML = '';
         }
         let formatter = new JSONFormatter(data, 3);
         document.getElementById('data').appendChild(formatter.render());
-        console.log(data);
       });
-
-      // Set data simulate mode on
-      overlay.simulateData(true);
     </script>
   </body>
 </html>

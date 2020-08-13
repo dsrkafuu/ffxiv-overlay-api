@@ -9,7 +9,7 @@ declare class OverlayAPI {
   removeAllListener(event: string): void;
   listListener(event: string): ((data: object) => any)[];
   endEncounter(): void;
-  simulateData(status: boolean): void;
+  simulateData(fakeData: object | false): void;
   call(msg: object): Promise<object>;
 }
 
