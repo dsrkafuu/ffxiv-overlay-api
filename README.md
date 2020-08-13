@@ -1,6 +1,6 @@
 # ffxiv-overlay-api
 
-[![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/bundlephobia/min/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
+[![](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
 
 Build your own modern FFXIV overlay with npm.
 
@@ -17,7 +17,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@1.1/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@2.0/lib/overlay.min.js"></script>
 ```
 
 ## Usage
