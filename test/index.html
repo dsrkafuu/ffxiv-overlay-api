@@ -30,6 +30,7 @@
       //Init API
       const overlay = new OverlayAPI({
         liteMode: true,
+        simulateData: false,
       });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
@@ -49,6 +50,9 @@
         document.getElementById('data').appendChild(formatter.render());
         console.log(data);
       });
+
+      // Set data simulate mode on
+      overlay.simulateData(true);
     </script>
   </body>
 </html>

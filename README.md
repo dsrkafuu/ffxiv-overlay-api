@@ -36,6 +36,7 @@ You can also pass options to constructor:
 ```js
 const overlay = new OverlayAPI({
   liteMode: true,
+  simulateData: false,
 });
 ```
 
@@ -88,6 +89,12 @@ Remove all listener of one event type.
 - `@param {String} event` Event type which listener belongs to
 
 ### `OverlayAPI.endEncounter()`
+
+Switch data simulation.
+
+- `@param {Boolean} status` Simulate status
+
+### `OverlayAPI.simulateData(status)`
 
 Ends current encounter and save it. Returns a Promise.
 

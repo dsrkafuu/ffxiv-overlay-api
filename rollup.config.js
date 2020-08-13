@@ -1,6 +1,4 @@
 import babel from '@rollup/plugin-babel';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import path from 'path';
 import license from 'rollup-plugin-license';
@@ -35,9 +33,7 @@ export default {
     },
   ],
   plugins: [
-    resolve({ browser: true }),
-    commonjs(),
-    babel({ babelHelpers: 'runtime' }),
+    babel({ babelHelpers: 'bundled' }),
     license({
       sourcemap: true,
       banner: {
