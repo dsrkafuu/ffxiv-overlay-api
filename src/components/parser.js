@@ -27,16 +27,16 @@ function parseJob(jobName) {
   const heal = ['ast', 'cnj', 'sch', 'whm'];
   const tank = ['drk', 'gla', 'gld', 'gnb', 'mrd', 'pld', 'war'];
 
-  switch (jobName) {
-    case dps.includes(jobName):
-      return 'dps';
-    case heal.includes(jobName):
-      return 'heal';
-    case tank.includes(jobName):
-      return 'tank';
-    default:
-      return jobName;
+  if (dps.includes(jobName)) {
+    return 'dps';
   }
+  if (heal.includes(jobName)) {
+    return 'heal';
+  }
+  if (tank.includes(jobName)) {
+    return 'tank';
+  }
+  return jobName;
 }
 
 export default function parseData(data) {
