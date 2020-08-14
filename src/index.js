@@ -37,10 +37,12 @@ export default class OverlayAPI {
    */
   #initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
-      setTimeout(this.#initCallbackMode, 300);
+      setTimeout(() => {
+        this.#initCallbackMode();
+      }, 300);
       return;
     }
-    // API loaded
+    // API loadedpoint
     this.#status = true;
     // Bind `this` for callback function called by OverlayAPI
     window.__OverlayCallback = this.#triggerEvents.bind(this);
