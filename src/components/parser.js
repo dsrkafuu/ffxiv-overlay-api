@@ -42,18 +42,30 @@ function parseJob(jobName) {
 export default function parseData(data) {
   if (data.type === 'CombatData') {
     // Generate parsed data
+    const {
+      damage,
+      encdps,
+      duration,
+      healed,
+      enchps,
+      Last10DPS,
+      Last30DPS,
+      Last60DPS,
+      CurrentZoneName,
+    } = data.Encounter;
+
     const parsedData = {
       isActive: data.isActive,
       encounter: {
-        damage: data.Encounter.damage,
-        dps: data.Encounter.encdps,
-        duration: data.Encounter.duration,
-        healed: data.Encounter.healed,
-        hps: data.Encounter.enchps,
-        last10Dps: data.Encounter.Last10DPS,
-        last30Dps: data.Encounter.Last30DPS,
-        last60Dps: data.Encounter.Last60DPS,
-        zoneName: data.Encounter.CurrentZoneName,
+        damage,
+        dps: encdps,
+        duration,
+        healed,
+        hps: enchps,
+        last10Dps: Last10DPS,
+        last30Dps: Last30DPS,
+        last60Dps: Last60DPS,
+        zoneName: CurrentZoneName,
       },
       combatant: {},
     };
@@ -70,15 +82,37 @@ export default function parseData(data) {
           maxHit = maxHitData[0];
         }
 
+        const { damage, encdps, healed, enchps } = data.Combatant[key];
+
         parsedData.combatant[key] = {
-          damage: data.Combatant[key].damage,
-          dps: data.Combatant[key].encdps,
-          healed: data.Combatant[key].healed,
-          hps: data.Combatant[key].enchps,
+          damage,
+          dps: encdps,
+          healed,
+          hps: enchps,
           maxHeal,
           maxHit,
         };
       } else {
+        const {
+          crithits,
+          damage,
+          damagetaken,
+          DirectHitCount,
+          CritDirectHitCount,
+          deaths,
+          encdps,
+          healed,
+          healstaken,
+          hits,
+          enchps,
+          Job,
+          Last10DPS,
+          Last30DPS,
+          Last60DPS,
+          overHeal,
+          swings,
+        } = data.Combatant[key];
+
         let [maxHeal, maxHealDamage, maxHit, maxHitDamage] = new Array(4).fill(null);
         const maxHealData = data.Combatant[key].maxheal.split('-');
         const maxHitData = data.Combatant[key].maxhit.split('-');
@@ -92,24 +126,24 @@ export default function parseData(data) {
         }
 
         parsedData.combatant[key] = {
-          critHits: data.Combatant[key].crithits,
-          damage: data.Combatant[key].damage,
-          damageTaken: data.Combatant[key].damagetaken,
-          directHits: data.Combatant[key].DirectHitCount,
-          directCritHits: data.Combatant[key].CritDirectHitCount,
-          deaths: data.Combatant[key].deaths,
-          dps: data.Combatant[key].encdps,
-          healed: data.Combatant[key].healed,
-          healsTaken: data.Combatant[key].healstaken,
-          hits: data.Combatant[key].hits,
-          hps: data.Combatant[key].enchps,
-          job: data.Combatant[key].Job.toLowerCase(),
-          jobType: parseJob(data.Combatant[key].Job),
-          last10Dps: data.Combatant[key].Last10DPS,
-          last30Dps: data.Combatant[key].Last30DPS,
-          last60Dps: data.Combatant[key].Last60DPS,
-          overHeal: data.Combatant[key].overHeal,
-          swings: data.Combatant[key].swings,
+          critHits: crithits,
+          damage,
+          damageTaken: damagetaken,
+          directHits: DirectHitCount,
+          directCritHits: CritDirectHitCount,
+          deaths,
+          dps: encdps,
+          healed,
+          healsTaken: healstaken,
+          hits,
+          hps: enchps,
+          job: Job.toLowerCase(),
+          jobType: parseJob(Job),
+          last10Dps: Last10DPS,
+          last30Dps: Last30DPS,
+          last60Dps: Last60DPS,
+          overHeal,
+          swings,
           maxHeal,
           maxHealDamage,
           maxHit,
