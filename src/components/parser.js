@@ -74,7 +74,7 @@ export default function parseData(data) {
 
     for (let key in data.Combatant) {
       if (key === 'Limit Break') {
-        let [maxHeal, maxHit] = new Array(2).fill(null);
+        let [maxHeal, maxHit] = new Array(2).fill('');
         const maxHealData = data.Combatant[key].maxheal.split('-');
         const maxHitData = data.Combatant[key].maxhit.split('-');
         if (maxHealData.length > 1) {
@@ -115,7 +115,7 @@ export default function parseData(data) {
           swings,
         } = data.Combatant[key];
 
-        let [maxHeal, maxHealDamage, maxHit, maxHitDamage] = new Array(4).fill(null);
+        let [maxHeal, maxHealDamage, maxHit, maxHitDamage] = new Array(4).fill('');
         const maxHealData = data.Combatant[key].maxheal.split('-');
         const maxHitData = data.Combatant[key].maxhit.split('-');
         if (maxHealData.length > 1) {
