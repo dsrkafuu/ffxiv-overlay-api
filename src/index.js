@@ -39,7 +39,7 @@ export default class OverlayAPI {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
       setTimeout(() => {
         this.#initCallbackMode();
-      }, 300);
+      }, 500);
       return;
     }
     // API loadedpoint
@@ -94,7 +94,7 @@ export default class OverlayAPI {
       // Don't spam the server with retries
       setTimeout(() => {
         this.#initWebSocketMode();
-      }, 300);
+      }, 500);
     });
   }
 
