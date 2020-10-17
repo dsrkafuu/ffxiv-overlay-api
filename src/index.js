@@ -20,6 +20,8 @@ export default class OverlayAPI {
   // WebSocket
   #wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
   #ws = null;
+  #resCounter = 0;
+  #resPromises = {};
 
   // Fake data interval
   #simulator = null;
@@ -124,7 +126,12 @@ export default class OverlayAPI {
         logError(e, msg);
         return;
       }
-      this.#triggerEvents(msg);
+      if (msg.rseq !== undefined && this.#resPromises[msg.rseq]) {
+        this.#resPromises[msg.rseq](msg);
+        delete this.#resPromises[msg.rseq];
+      } else {
+        this.#triggerEvents(msg);
+      }
     });
     // Connection failed
     this.#ws.addEventListener('close', () => {
@@ -202,17 +209,6 @@ export default class OverlayAPI {
   }
 
   /**
-   * Start listening event
-   * @public
-   */
-  startEvent() {
-    this.#sendMessage({
-      call: 'subscribe',
-      events: Object.keys(this.#subscribers),
-    });
-  }
-
-  /**
    * Remove all listener of one event type
    * @public
    * @param {String} event Event type which listener belongs to
@@ -230,6 +226,17 @@ export default class OverlayAPI {
    */
   listAllListener(event) {
     return this.#subscribers[event] ? this.#subscribers[event] : [];
+  }
+
+  /**
+   * Start listening event
+   * @public
+   */
+  startEvent() {
+    this.#sendMessage({
+      call: 'subscribe',
+      events: Object.keys(this.#subscribers),
+    });
   }
 
   /**
@@ -269,25 +276,35 @@ export default class OverlayAPI {
   //   }
   // }
 
-  // /**
-  //  * This function allows you to call an overlay handler
-  //  * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot)
-  //  * Returns a Promise
-  //  * @public
-  //  * @param {Object} msg Message send to OverlayPlugin
-  //  */
-  // call(msg) {
-  //   return new Promise((resolve, reject) => {
-  //     this.#sendMessage(msg, (data) => {
-  //       let rd;
-  //       try {
-  //         rd = data == null ? null : JSON.parse(data);
-  //       } catch (e) {
-  //         logError('Error parse JSON', e, data);
-  //         return reject(e);
-  //       }
-  //       return resolve(rd);
-  //     });
-  //   });
-  // }
+  /**
+   * This function allows you to call an overlay handler
+   * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot)
+   * Returns a Promise
+   * @public
+   * @param {Object} msg Message send to OverlayPlugin
+   */
+  callHandler(msg) {
+    let p;
+    if (this.#ws) {
+      msg.rseq = this.#resCounter++;
+      p = new Promise((resolve) => {
+        this.#resPromises[msg.rseq] = resolve;
+      });
+      this.#sendMessage(msg);
+    } else {
+      p = new Promise((resolve) => {
+        this.#sendMessage(msg, (data) => {
+          let rd;
+          try {
+            rd = data == null ? null : JSON.parse(data);
+          } catch (e) {
+            logError(e, data);
+            return reject(e);
+          }
+          return resolve(rd);
+        });
+      });
+    }
+    return p;
+  }
 }
