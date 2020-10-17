@@ -29,7 +29,8 @@
     <script>
       //Init API
       const overlay = new OverlayAPI({
-        extend: true,
+        extendData: true,
+        silentMode: false,
       });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
@@ -41,7 +42,7 @@
       overlay.removeAllListener('ChangeZone');
 
       // Pass some fake data for development simulation
-      fetch('./fake_cn.json')
+      fetch('https://raw.githubusercontent.com/amzrk2/ffxiv-overlay-api/master/test/fake_cn.json')
         .then((response) => {
           return response.json();
         })
