@@ -24,7 +24,7 @@ export default class OverlayAPI {
   #resPromises = {};
 
   // Fake data interval
-  #simulator = null;
+  // #simulator = null;
 
   /**
    * Init API
@@ -252,30 +252,6 @@ export default class OverlayAPI {
     }
   }
 
-  // /**
-  //  * Switch data simulation
-  //  * @param {Object|Boolean} fakeData Simulation data
-  //  */
-  // simulateData(fakeData) {
-  //   if (typeof fakeData === 'object') {
-  //     if (fakeData.hasOwnProperty('type') && fakeData.type === 'CombatData') {
-  //       this.#simulator = setInterval(() => {
-  //         this.#triggerEvents(fakeData);
-  //       }, 1000);
-  //       logInfo('Data simulating on with fake data', fakeData);
-  //     } else {
-  //       logError('You need to provide currect fake CombatData object to enable data simulation', e);
-  //     }
-  //   } else if (typeof fakeData === 'boolean' && !fakeData) {
-  //     if (this.#simulator) {
-  //       clearInterval(this.#simulator);
-  //     }
-  //     logInfo('Data simulating off');
-  //   } else {
-  //     logError('Function simulateData(fakeData) wrong params', fakeData);
-  //   }
-  // }
-
   /**
    * This function allows you to call an overlay handler
    * These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot)
@@ -307,4 +283,28 @@ export default class OverlayAPI {
     }
     return p;
   }
+
+  // /**
+  //  * Switch data simulation
+  //  * @param {Object|Boolean} fakeData Simulation data
+  //  */
+  // simulateData(fakeData) {
+  //   if (typeof fakeData === 'object') {
+  //     if (fakeData.hasOwnProperty('type') && fakeData.type === 'CombatData') {
+  //       this.#simulator = setInterval(() => {
+  //         this.#triggerEvents(fakeData);
+  //       }, 1000);
+  //       logInfo('Data simulating on with fake data', fakeData);
+  //     } else {
+  //       logError('You need to provide currect fake CombatData object to enable data simulation', e);
+  //     }
+  //   } else if (typeof fakeData === 'boolean' && !fakeData) {
+  //     if (this.#simulator) {
+  //       clearInterval(this.#simulator);
+  //     }
+  //     logInfo('Data simulating off');
+  //   } else {
+  //     logError('Function simulateData(fakeData) wrong params', fakeData);
+  //   }
+  // }
 }
