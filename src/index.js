@@ -36,12 +36,15 @@ export default class OverlayAPI {
   constructor(options = {}) {
     // Init options
     this.#options = Object.assign({}, defaultOptions, options);
+
     // Check mode
     if (this.#wsURL && this.#wsURL.length > 0) {
       // If in websocket mode
+      !this.#options.silentMode && logInfo('Initializing API in WebSocket Mode...');
       this.#initWebSocketMode();
     } else {
       // Normal mode
+      !this.#options.silentMode && logInfo('Initializing API in Callback Mode...');
       this.#initCallbackMode();
     }
     window.dispatchOverlayEvent = this.#triggerEvents.bind(this);
@@ -91,7 +94,7 @@ export default class OverlayAPI {
     if (this.#subscribers[msg.type]) {
       // Trigger all this event's callback
       for (let cb of this.#subscribers[msg.type]) {
-        if (this.#options.extend) {
+        if (this.#options.extendData) {
           cb(extendData(msg));
         } else {
           cb(msg);
@@ -112,13 +115,14 @@ export default class OverlayAPI {
     });
     // Successfully connected WebSocket
     this.#ws.addEventListener('open', () => {
-      logInfo('WebSocket connected');
+      !this.#options.silentMode && logInfo('WebSocket connected');
       this.#status = true;
       // Send all messages in queue to OverlayPlugin
       while (this.#queue.length > 0) {
         let msg = this.#queue.shift();
         this.#sendMessage(msg);
       }
+      !this.#options.silentMode && logInfo('API ready');
     });
     // On message loaded from WebSocket
     this.#ws.addEventListener('message', (msg) => {
@@ -138,7 +142,7 @@ export default class OverlayAPI {
     // Connection failed
     this.#ws.addEventListener('close', () => {
       this.#status = false;
-      logInfo('WebSocket trying to reconnect...');
+      !this.#options.silentMode && logInfo('WebSocket trying to reconnect...');
       // Don't spam the server with retries
       setTimeout(() => {
         this.#initWebSocketMode();
@@ -152,6 +156,7 @@ export default class OverlayAPI {
    */
   #initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
+      !this.#options.silentMode && logInfo('API not ready, trying to reconnect...');
       setTimeout(() => {
         this.#initCallbackMode();
       }, 500);
@@ -166,6 +171,7 @@ export default class OverlayAPI {
       let { msg, cb } = this.#queue.shift();
       this.#sendMessage(msg, cb);
     }
+    !this.#options.silentMode && logInfo('API ready');
   }
 
   /**
@@ -183,6 +189,7 @@ export default class OverlayAPI {
     // Push events
     if (typeof cb === 'function') {
       this.#subscribers[event].push(cb);
+      !this.#options.silentMode && logInfo('Listener', cb, 'of event', event, 'added');
     } else {
       logError('Wrong params', cb);
       return;
@@ -202,6 +209,7 @@ export default class OverlayAPI {
         let cbPos = this.#subscribers[event].indexOf(cb);
         if (cbPos > -1) {
           this.#subscribers[event].splice(cbPos, 1);
+          !this.#options.silentMode && logInfo('Listener', cb, 'of event', event, 'removed');
         }
       } else {
         logError('Wrong params', cb);
@@ -218,6 +226,7 @@ export default class OverlayAPI {
   removeAllListener(event) {
     if (this.#subscribers[event] && this.#subscribers[event].length > 0) {
       this.#subscribers[event] = [];
+      !this.#options.silentMode && logInfo('All listener of event', event, 'removed');
     }
   }
 
@@ -239,6 +248,7 @@ export default class OverlayAPI {
       call: 'subscribe',
       events: Object.keys(this.#subscribers),
     });
+    !this.#options.silentMode && logInfo('Events', Object.keys(this.#subscribers), 'started');
   }
 
   /**
@@ -252,6 +262,7 @@ export default class OverlayAPI {
     } else {
       logError('Plugin not ready yet');
     }
+    !this.#options.silentMode && logInfo('Encounter ended');
   }
 
   /**
@@ -295,8 +306,9 @@ export default class OverlayAPI {
       if (fakeData.hasOwnProperty('type') && fakeData.type === 'CombatData') {
         this.#simulator = setInterval(() => {
           this.#triggerEvents(fakeData);
+          !this.#options.silentMode && logInfo('Data simulating triggered');
         }, 1000);
-        logInfo('Data simulating on with fake data', fakeData);
+        !this.#options.silentMode && logInfo('Data simulating on with fake data', fakeData);
       } else {
         logError('You need to provide currect fake CombatData object to enable data simulation');
       }
@@ -304,7 +316,7 @@ export default class OverlayAPI {
       if (this.#simulator) {
         clearInterval(this.#simulator);
       }
-      logInfo('Data simulating off');
+      !this.#options.silentMode && logInfo('Data simulating off');
     }
   }
 }
