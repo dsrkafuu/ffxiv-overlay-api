@@ -1,6 +1,6 @@
 import { logInfo, logError } from './components/logger';
 import defaultOptions from './components/options';
-// import parseData from './components/parser';
+import extendData from './components/extend';
 
 /**
  * OverlayAPI class
@@ -89,11 +89,11 @@ export default class OverlayAPI {
     if (this.#subscribers[msg.type]) {
       // Trigger all this event's callback
       for (let cb of this.#subscribers[msg.type]) {
-        // if (this.#options.liteMode) {
-        //   cb(parseData(msg));
-        // } else {
-        cb(msg);
-        // }
+        if (this.#options.extend) {
+          cb(extendData(msg));
+        } else {
+          cb(msg);
+        }
       }
     }
   }

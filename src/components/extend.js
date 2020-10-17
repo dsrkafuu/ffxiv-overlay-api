@@ -1,5 +1,5 @@
 /**
- * Combat data parser for liteMode
+ * Extend data parser
  * @param {Object} data Data from OverlayPlugin
  */
 
@@ -36,12 +36,12 @@ function parseJob(jobName) {
   if (tank.includes(jobName)) {
     return 'tank';
   }
-  return jobName;
+  return 'others';
 }
 
-export default function parseData(data) {
+export default function extendData(data) {
   if (data.type === 'CombatData') {
-    // Generate parsed data
+    /* common info */
     const {
       damage,
       encdps,
@@ -72,8 +72,10 @@ export default function parseData(data) {
       combatant: {},
     };
 
+    /* combatant */
     for (let key in data.Combatant) {
       if (key === 'Limit Break') {
+        /* lb */
         let [maxHeal, maxHit] = new Array(2).fill('');
         const maxHealData = data.Combatant[key].maxheal.split('-');
         const maxHitData = data.Combatant[key].maxhit.split('-');
@@ -83,9 +85,7 @@ export default function parseData(data) {
         if (maxHitData.length > 1) {
           maxHit = maxHitData[0];
         }
-
         const { damage, encdps, healed, enchps } = data.Combatant[key];
-
         parsedData.combatant[key] = {
           damage,
           dps: encdps,
@@ -95,6 +95,7 @@ export default function parseData(data) {
           maxHit,
         };
       } else {
+        /* player */
         const {
           crithits,
           damage,
@@ -154,8 +155,7 @@ export default function parseData(data) {
       }
     }
 
-    return parsedData;
-  } else {
-    return data;
+    data.extendData = parsedData;
   }
+  return data;
 }

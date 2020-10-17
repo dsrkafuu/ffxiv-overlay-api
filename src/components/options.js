@@ -1,3 +1,3 @@
 export default {
-  liteMode: false,
+  extend: false,
 };

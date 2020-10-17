@@ -29,7 +29,7 @@
     <script>
       //Init API
       const overlay = new OverlayAPI({
-        liteMode: true,
+        extend: true,
       });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
@@ -41,7 +41,6 @@
       overlay.removeAllListener('ChangeZone');
 
       // Pass some fake data for development simulation
-      /*
       fetch('./fake_cn.json')
         .then((response) => {
           return response.json();
@@ -53,7 +52,6 @@
             overlay.simulateData();
           }, 10000);
         });
-      */
 
       // Add listener to display
       overlay.addListener('CombatData', (data) => {
