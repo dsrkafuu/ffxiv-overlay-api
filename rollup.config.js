@@ -1,6 +1,5 @@
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
-import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -30,10 +29,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [
-    babel({ babelHelpers: 'bundled' }),
-    copy({
-      targets: [{ src: 'src/index.d.ts', dest: 'lib/' }],
-    }),
-  ],
+  plugins: [babel({ babelHelpers: 'bundled' })],
 };

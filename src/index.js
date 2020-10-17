@@ -1,3 +1,5 @@
+/*! ffxiv-overlay-plugin | DSRKafuU <amzrk2.cc> | Copyright (c) MIT License */
+
 import { logInfo, logError } from './components/logger';
 import defaultOptions from './components/options';
 import extendData from './components/extend';
@@ -224,7 +226,7 @@ export default class OverlayAPI {
    * @public
    * @param {String} event Event type which listener belongs to
    */
-  listAllListener(event) {
+  getAllListener(event) {
     return this.#subscribers[event] ? this.#subscribers[event] : [];
   }
 
