@@ -4,18 +4,18 @@ export = OverlayAPI;
 
 declare class OverlayAPI {
   constructor(options?: OverlayAPI.Options);
-  addListener(event: string, cb: (data: object) => any): void;
-  removeListener(event: string, cb: (data: object) => any): void;
+  addListener(event: string, cb: function): void;
+  removeListener(event: string, cb: function): void;
   removeAllListener(event: string): void;
-  listListener(event: string): ((data: object) => any)[];
+  listAllListener(event: string): function[];
+  startEvent(): void;
   endEncounter(): void;
-  simulateData(fakeData: object | false): void;
-  call(msg: object): Promise<object>;
+  callHandler(msg: object): Promise;
+  simulateData(fakeData: object | undefined): void;
 }
 
 declare namespace OverlayAPI {
   export interface Options {
-    liteMode?: boolean;
-    simulateData?: boolean;
+    extend?: boolean;
   }
 }
