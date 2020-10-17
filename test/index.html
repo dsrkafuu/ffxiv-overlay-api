@@ -36,11 +36,12 @@
         console.log('New listener of ChangeZone', data);
       });
       // List ChangeZone listeners
-      overlay.listListener('ChangeZone');
+      overlay.listAllListener('ChangeZone');
       // Remove unused listeners
       overlay.removeAllListener('ChangeZone');
 
       // Pass some fake data for development simulation
+      /*
       fetch('./fake_cn.json')
         .then((response) => {
           return response.json();
@@ -49,11 +50,12 @@
           overlay.simulateData(fakeData);
           setTimeout(() => {
             // Disable simulation
-            overlay.simulateData(false);
-          }, 5000);
+            overlay.simulateData();
+          }, 10000);
         });
+      */
 
-      // Add listener to get real data to display
+      // Add listener to display
       overlay.addListener('CombatData', (data) => {
         if (document.getElementById('data').childNodes.length > 0) {
           document.getElementById('data').innerHTML = '';
@@ -61,6 +63,7 @@
         let formatter = new JSONFormatter(data, 3);
         document.getElementById('data').appendChild(formatter.render());
       });
+      overlay.startEvent();
     </script>
   </body>
 </html>
