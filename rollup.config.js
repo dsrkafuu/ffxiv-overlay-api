@@ -1,6 +1,7 @@
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
+import license from 'rollup-plugin-license';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -29,5 +30,13 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [babel({ babelHelpers: 'bundled' })],
+  plugins: [
+    babel({ babelHelpers: 'bundled' }),
+    license({
+      banner: {
+        content: `ffxiv-overlay-plugin <%= pkg.version %> | DSRKafuU <amzrk2.cc> | Copyright (c) MIT License`,
+        commentStyle: 'ignored',
+      },
+    }),
+  ],
 };
