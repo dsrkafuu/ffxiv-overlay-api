@@ -1,7 +1,5 @@
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
-import path from 'path';
-import license from 'rollup-plugin-license';
 import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
@@ -34,13 +32,6 @@ export default {
   ],
   plugins: [
     babel({ babelHelpers: 'bundled' }),
-    license({
-      sourcemap: true,
-      banner: {
-        commentStyle: 'ignored',
-        content: { file: path.join(__dirname, '.licenserc'), encoding: 'utf-8' },
-      },
-    }),
     copy({
       targets: [{ src: 'src/index.d.ts', dest: 'lib/' }],
     }),

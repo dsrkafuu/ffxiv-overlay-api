@@ -1,3 +1,0 @@
-<%= pkg.name %> v<%= pkg.version %> - MIT License
-Copyright (c) 2020 DSRKafuU <amzrk2.cc>
-Copyright (c) 2014 RainbowMage, hibiyasleep, ngld
