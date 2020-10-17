@@ -1,10 +1,20 @@
-# ffxiv-overlay-api
+# 🗡 ffxiv-overlay-api 🛡
 
 [![BADGE](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
 
 Build your own modern FFXIV overlay with npm.
 
 This library needs to be used along with [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin).
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Options](#options)
+- [API](#api)
+- [Development](#development)
+- [Contributon](#contributon)
+- [Annotations](#annotations)
 
 ## Installation
 
