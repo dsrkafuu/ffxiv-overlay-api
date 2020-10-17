@@ -40,12 +40,12 @@
           return;
         }
 
-        if (msg.rseq !== undefined && responsePromises[msg.rseq]) {
-          responsePromises[msg.rseq](msg);
-          delete responsePromises[msg.rseq];
-        } else {
-          processEvent(msg);
-        }
+        // if (msg.rseq !== undefined && responsePromises[msg.rseq]) {
+        //   responsePromises[msg.rseq](msg);
+        //   delete responsePromises[msg.rseq];
+        // } else {
+        processEvent(msg);
+        // }
       });
 
       ws.addEventListener('close', () => {
