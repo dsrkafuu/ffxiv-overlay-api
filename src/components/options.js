@@ -1,4 +1,4 @@
 export default {
-  extendData: false,
+  extendData: true,
   silentMode: false,
 };

@@ -1,6 +1,9 @@
 # 🗡 ffxiv-overlay-api 🛡
 
-[![BADGE](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
+![BADGE](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish)
+![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api)
+![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api)
+![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api)
 
 Build your own modern FFXIV overlay with npm.
 
@@ -27,7 +30,16 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.0.1/lib/overlay.min.js"></script>
+<!-- legacy -->
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.1/lib/overlay.min.js"></script>
+<!-- browser native es module -->
+<script type="module">
+  import OverlayAPI from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.1/lib/overlay.esm.min.js';
+  const overlay = new OverlayAPI({
+    extendData: true,
+    silentMode: false,
+  });
+</script>
 ```
 
 ## Usage
@@ -41,7 +53,7 @@ const overlay = new OverlayAPI();
 
 Note that this library only works in browser.
 
-You can also pass options to constructor:
+You can also pass options to constructor (default option below):
 
 ```js
 const overlay = new OverlayAPI({
@@ -78,7 +90,7 @@ Checkout [Development](#development) section for more details.
 
 | Option       | Default | Description                                             |
 | ------------ | ------- | ------------------------------------------------------- |
-| `extendData` | `false` | Parse and add cleaner data to listeners of `CombatData` |
+| `extendData` | `true`  | Parse and add cleaner data to listeners of `CombatData` |
 | `silentMode` | `false` | For production use, do not log all API stats info       |
 
 ## API
@@ -154,4 +166,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> © 2020 DSRKafuU [Twitter @amzrk2](https://twitter.com/amzrk2)
+> Copyright © 2020-present DSRKafuU <https://amzrk2.cc/>

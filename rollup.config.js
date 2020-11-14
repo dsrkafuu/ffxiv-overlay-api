@@ -17,17 +17,25 @@ export default {
     },
     {
       exports: 'auto',
-      name: 'OverlayAPI',
-      file: pkg.browser,
-      format: 'umd',
-      plugins: [IS_PROD && terser()],
-      sourcemap: false,
-    },
-    {
-      exports: 'auto',
       file: pkg.module,
       format: 'esm',
       sourcemap: true,
+    },
+    {
+      exports: 'auto',
+      name: 'OverlayAPI',
+      file: 'lib/overlay.min.js',
+      format: 'iife',
+      plugins: [IS_PROD && terser()],
+      sourcemap: !IS_PROD,
+    },
+    {
+      exports: 'auto',
+      name: 'OverlayAPI',
+      file: 'lib/overlay.esm.min.js',
+      format: 'esm',
+      plugins: [IS_PROD && terser()],
+      sourcemap: !IS_PROD,
     },
   ],
   plugins: [

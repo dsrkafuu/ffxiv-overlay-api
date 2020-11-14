@@ -42,7 +42,7 @@
       overlay.removeAllListener('ChangeZone');
 
       // Pass some fake data for development simulation
-      fetch('https://raw.githubusercontent.com/amzrk2/ffxiv-overlay-api/master/test/fake_cn.json')
+      fetch('./fake_cn.json')
         .then((response) => {
           return response.json();
         })
