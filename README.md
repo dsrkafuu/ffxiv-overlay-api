@@ -1,6 +1,7 @@
 # 🗡 ffxiv-overlay-api 🛡
 
 [![BADGE](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api?style=flat-square)](https://www.npmjs.com/package/ffxiv-overlay-api) [![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api?style=flat-square)](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Famzrk2%2Fffxiv-overlay-api.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Famzrk2%2Fffxiv-overlay-api?ref=badge_shield)
 
 Build your own modern FFXIV overlay with npm.
 
@@ -155,3 +156,7 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
 > © 2020 DSRKafuU [Twitter @amzrk2](https://twitter.com/amzrk2)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Famzrk2%2Fffxiv-overlay-api.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Famzrk2%2Fffxiv-overlay-api?ref=badge_large)
