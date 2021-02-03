@@ -1,4 +1,4 @@
-export default {
+export const defaultOptions = {
   extendData: true,
   silentMode: false,
 };

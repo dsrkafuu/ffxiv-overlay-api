@@ -1,6 +1,6 @@
 /**
  * parse job type
- * @param {String} jobName
+ * @param {string} jobName
  */
 function parseJob(jobName) {
   jobName = jobName.toLowerCase();
@@ -152,7 +152,7 @@ function parseLimitBreak(data) {
  * insert extended data
  * @param {Object} data data from OverlayPlugin
  */
-export default function extendData(data) {
+export function extendData(data) {
   if (data.type === 'CombatData') {
     // common data
     const parsedData = {

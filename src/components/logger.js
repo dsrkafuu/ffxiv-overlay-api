@@ -1,13 +1,15 @@
 /**
- * Console info logger
+ * console info logger
+ * @param {...any} params
  */
 export function logInfo(...params) {
-  console.info('[OverlayAPI]', ...params);
+  console.info('[ffxiv-overlay-api]', ...params);
 }
 
 /**
- * Console error logger
+ * console error logger
+ * @param {...any} params
  */
 export function logError(...params) {
-  console.error('[OverlayAPI]', ...params);
+  console.error('[ffxiv-overlay-api]', ...params);
 }

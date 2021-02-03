@@ -31,10 +31,10 @@ Or import the library from jsDelivr CDN:
 
 ```html
 <!-- legacy -->
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.1/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.2/lib/overlay.min.js"></script>
 <!-- browser native es module -->
 <script type="module">
-  import OverlayAPI from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.1/lib/overlay.esm.min.js';
+  import { OverlayAPI } from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.2/lib/overlay.esm.min.js';
   const overlay = new OverlayAPI({
     extendData: true,
     silentMode: false,
@@ -47,7 +47,7 @@ Or import the library from jsDelivr CDN:
 After installation, you can import the library:
 
 ```js
-import OverlayAPI from 'ffxiv-overlay-api';
+import { OverlayAPI } from 'ffxiv-overlay-api';
 const overlay = new OverlayAPI();
 ```
 
@@ -67,10 +67,10 @@ Then you can add bunch of different listeners.
 ```js
 const overlay = new OverlayAPI();
 overlay.addListener('CombatData', (data) => {
-  console.log('Listener of CombatData', data);
+  console.log('listener of CombatData', data);
 });
 overlay.addListener('ChangeZone', (data) => {
-  console.log('Listener of ChangeZone', data);
+  console.log('listener of ChangeZone', data);
 });
 ```
 

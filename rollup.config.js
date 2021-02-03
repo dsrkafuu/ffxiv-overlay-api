@@ -1,9 +1,9 @@
-import babel from '@rollup/plugin-babel';
+import { babel } from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
-import license from 'rollup-plugin-license';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
+const BANNER = '/*! ffxiv-overlay-api | DSRKafuU <amzrk2.cc> | Copyright (c) MIT License */';
 
 export default {
   input: './src/index.js',
@@ -14,12 +14,14 @@ export default {
       file: pkg.main,
       format: 'umd',
       sourcemap: true,
+      banner: BANNER,
     },
     {
       exports: 'auto',
       file: pkg.module,
       format: 'esm',
       sourcemap: true,
+      banner: BANNER,
     },
     {
       exports: 'auto',
@@ -28,6 +30,7 @@ export default {
       format: 'iife',
       plugins: [IS_PROD && terser()],
       sourcemap: !IS_PROD,
+      banner: BANNER,
     },
     {
       exports: 'auto',
@@ -36,15 +39,8 @@ export default {
       format: 'esm',
       plugins: [IS_PROD && terser()],
       sourcemap: !IS_PROD,
+      banner: BANNER,
     },
   ],
-  plugins: [
-    babel({ babelHelpers: 'bundled' }),
-    license({
-      banner: {
-        content: `ffxiv-overlay-plugin <%= pkg.version %> | DSRKafuU <amzrk2.cc> | Copyright (c) MIT License`,
-        commentStyle: 'ignored',
-      },
-    }),
-  ],
+  plugins: [babel({ babelHelpers: 'bundled' })],
 };
