@@ -34,7 +34,7 @@
       });
       // Add listener
       overlay.addListener('ChangeZone', (data) => {
-        console.log('New listener of ChangeZone', data);
+        console.log('new listener of ChangeZone', data);
       });
       // List ChangeZone listeners
       console.log(overlay.getAllListener('ChangeZone'));
@@ -43,15 +43,11 @@
 
       // Pass some fake data for development simulation
       fetch('./fake_cn.json')
-        .then((response) => {
-          return response.json();
-        })
-        .then((fakeData) => {
-          overlay.simulateData(fakeData);
-          setTimeout(() => {
-            // Disable simulation
-            overlay.simulateData();
-          }, 10000);
+        .then((res) => res.json())
+        .then((obj) => {
+          setInterval(() => {
+            overlay.simulateData(obj);
+          }, 1000);
         });
 
       // Add listener to display
