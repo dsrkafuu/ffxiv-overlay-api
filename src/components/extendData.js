@@ -1,6 +1,7 @@
 /**
  * parse job type
  * @param {string} jobName
+ * @return {'dps'|'heal'|'tank'|'others'}
  */
 function parseJob(jobName) {
   jobName = jobName.toLowerCase();
@@ -42,6 +43,7 @@ function parseJob(jobName) {
 /**
  * parse single player
  * @param {Object} data
+ * @return {Object}
  */
 function parsePlayer(data) {
   let [maxHit, maxHitDamage] = ['', 0];
@@ -100,6 +102,7 @@ function parsePlayer(data) {
 /**
  * parse encounter data
  * @param {Object} data
+ * @return {Object}
  */
 function parseEncounter(data) {
   return {
@@ -121,6 +124,7 @@ function parseEncounter(data) {
 /**
  * parse LB data
  * @param {Object} data
+ * @return {Object}
  */
 function parseLimitBreak(data) {
   let maxHit = '';
@@ -151,6 +155,7 @@ function parseLimitBreak(data) {
 /**
  * insert extended data
  * @param {Object} data data from OverlayPlugin
+ * @return {Object}
  */
 export function extendData(data) {
   if (data.type === 'CombatData') {

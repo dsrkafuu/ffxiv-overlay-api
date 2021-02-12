@@ -1,32 +1,28 @@
-/*! ffxiv-overlay-plugin | DSRKafuU <amzrk2.cc> | Copyright (c) MIT License */
+/*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.co) | Copyright MIT License */
 
-import { logInfo, logError } from './components/logger.js';
-import { defaultOptions } from './components/defaultOptions.js';
-import { extendData } from './components/extendData.js';
+import { logInfo, logError } from './components/logger';
+import { defaultOptions } from './components/defaultOptions';
+import { extendData } from './components/extendData';
 
 /**
- * OverlayAPI class
  * @class
  */
 export class OverlayAPI {
-  // Settings
+  // settings
   #options = {};
-  // Event subscribers
+  // event subscribers
   // { event:string : cb:function[] }
   #subscribers = {};
-  // Plugin init status
+  // plugin init status
   #status = false;
-  // Waiting queue before api init
+  // waiting queue before api init
   // { msg:object, cb:function }[] (normal) | msg[] (ws)
   #queue = [];
-  // WebSocket
+  // websocket
   #wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
   #ws = null;
   #resCounter = 0;
   #resPromises = {};
-
-  // Fake data interval
-  #simulator = null;
 
   /**
    * init API
@@ -34,31 +30,32 @@ export class OverlayAPI {
    * @param {Object} options
    */
   constructor(options = {}) {
-    // Init options
+    // init options
     this.#options = Object.assign({}, defaultOptions, options);
 
-    // Check mode
+    // check mode
     if (this.#wsURL && this.#wsURL.length > 0) {
-      // If in websocket mode
+      // if in websocket mode
       !this.#options.silentMode && logInfo('initializing api in websocket mode...');
       this.#initWebSocketMode();
     } else {
-      // Normal mode
+      // normal mode
       !this.#options.silentMode && logInfo('initializing api in callback mode...');
       this.#initCallbackMode();
     }
+    // `common.js` #L92 binding
     window.dispatchOverlayEvent = this.#triggerEvents.bind(this);
   }
 
   /**
    * send message to OverlayPluginApi or push into queue before its init
-   * @public
+   * @private
    * @param {Object} msg object to send
    * @param {Function} cb callback function
    */
   #sendMessage(msg, cb) {
     if (this.#ws) {
-      // WS mode
+      // websocket mode
       if (this.#status) {
         try {
           this.#ws.send(JSON.stringify(msg));
@@ -70,7 +67,7 @@ export class OverlayAPI {
         this.#queue.push(msg);
       }
     } else {
-      // CB mode
+      // callback mode
       if (this.#status) {
         try {
           window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
@@ -115,14 +112,14 @@ export class OverlayAPI {
     });
     // successfully connected WebSocket
     this.#ws.addEventListener('open', () => {
-      !this.#options.silentMode && logInfo('WebSocket connected');
+      !this.#options.silentMode && logInfo('websocket connected');
       this.#status = true;
-      // Send all messages in queue to OverlayPlugin
+      // send all messages in queue to OverlayPlugin
       while (this.#queue.length > 0) {
         let msg = this.#queue.shift();
         this.#sendMessage(msg);
       }
-      !this.#options.silentMode && logInfo('API ready');
+      !this.#options.silentMode && logInfo('api ready');
     });
     // on message loaded from WebSocket
     this.#ws.addEventListener('message', (msg) => {
@@ -142,11 +139,11 @@ export class OverlayAPI {
     // connection failed
     this.#ws.addEventListener('close', () => {
       this.#status = false;
-      !this.#options.silentMode && logInfo('WebSocket trying to reconnect...');
+      !this.#options.silentMode && logInfo('websocket trying to reconnect...');
       // don't spam the server with retries
       setTimeout(() => {
         this.#initWebSocketMode();
-      }, 500);
+      }, 5000);
     });
   }
 
@@ -156,22 +153,23 @@ export class OverlayAPI {
    */
   #initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
-      !this.#options.silentMode && logInfo('API not ready, trying to reconnect...');
+      !this.#options.silentMode && logInfo('api not ready, trying to reconnect...');
       setTimeout(() => {
         this.#initCallbackMode();
-      }, 500);
+      }, 5000);
       return;
     }
-    // API loadedpoint
+    // api loadedpoint
     this.#status = true;
     // bind `this` for callback function called by OverlayAPI
+    // `common.js` #L78 binding
     window.__OverlayCallback = this.#triggerEvents.bind(this);
     // send all messages in queue to OverlayPlugin
     while (this.#queue.length > 0) {
       let { msg, cb } = this.#queue.shift();
       this.#sendMessage(msg, cb);
     }
-    !this.#options.silentMode && logInfo('API ready');
+    !this.#options.silentMode && logInfo('api ready');
   }
 
   /**
@@ -189,10 +187,9 @@ export class OverlayAPI {
     // push events
     if (typeof cb === 'function') {
       this.#subscribers[event].push(cb);
-      !this.#options.silentMode && logInfo('Listener', cb, 'of event', event, 'added');
+      !this.#options.silentMode && logInfo('listener', cb, 'of event', event, 'added');
     } else {
-      logError('Wrong params', cb);
-      return;
+      logError('wrong params', cb);
     }
   }
 
@@ -209,11 +206,10 @@ export class OverlayAPI {
         let cbPos = this.#subscribers[event].indexOf(cb);
         if (cbPos > -1) {
           this.#subscribers[event].splice(cbPos, 1);
-          !this.#options.silentMode && logInfo('Listener', cb, 'of event', event, 'removed');
+          !this.#options.silentMode && logInfo('listener', cb, 'of event', event, 'removed');
         }
       } else {
-        logError('Wrong params', cb);
-        return;
+        logError('wrong params', cb);
       }
     }
   }
@@ -226,7 +222,7 @@ export class OverlayAPI {
   removeAllListener(event) {
     if (this.#subscribers[event] && this.#subscribers[event].length > 0) {
       this.#subscribers[event] = [];
-      !this.#options.silentMode && logInfo('All listener of event', event, 'removed');
+      !this.#options.silentMode && logInfo('all listener of event', event, 'removed');
     }
   }
 
@@ -249,7 +245,7 @@ export class OverlayAPI {
       call: 'subscribe',
       events: Object.keys(this.#subscribers),
     });
-    !this.#options.silentMode && logInfo('Events', Object.keys(this.#subscribers), 'started');
+    !this.#options.silentMode && logInfo('events', Object.keys(this.#subscribers), 'started');
   }
 
   /**
@@ -261,9 +257,9 @@ export class OverlayAPI {
     if (this.#status) {
       return window.OverlayPluginApi.endEncounter();
     } else {
-      logError('Plugin not ready yet');
+      logError('plugin not ready yet');
     }
-    !this.#options.silentMode && logInfo('Encounter ended');
+    !this.#options.silentMode && logInfo('encounter ended');
   }
 
   /**
@@ -300,25 +296,11 @@ export class OverlayAPI {
   }
 
   /**
-   * switch data simulation
-   * @param {Object} fakeData simulation data
+   * simulate triggering event once
+   * @public
+   * @param {Object} msg data same as those from OverlayPluginApi
    */
-  simulateData(fakeData) {
-    if (typeof fakeData === 'object') {
-      if (fakeData.hasOwnProperty('type') && fakeData.type === 'CombatData') {
-        this.#simulator = setInterval(() => {
-          this.#triggerEvents(fakeData);
-          !this.#options.silentMode && logInfo('Data simulating triggered');
-        }, 1000);
-        !this.#options.silentMode && logInfo('Data simulating on with fake data', fakeData);
-      } else {
-        logError('You need to provide currect fake CombatData object to enable data simulation');
-      }
-    } else {
-      if (this.#simulator) {
-        clearInterval(this.#simulator);
-      }
-      !this.#options.silentMode && logInfo('Data simulating off');
-    }
+  simulateData(msg) {
+    this.#triggerEvents(msg);
   }
 }

@@ -1,6 +1,6 @@
 # 🗡 ffxiv-overlay-api 🛡
 
-![BADGE](https://img.shields.io/github/workflow/status/amzrk2/ffxiv-overlay-api/npm-publish)
+![BADGE](https://img.shields.io/github/workflow/status/dsrkafuu/ffxiv-overlay-api/npm-publish)
 ![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api)
 ![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api)
 ![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api)
@@ -31,10 +31,10 @@ Or import the library from jsDelivr CDN:
 
 ```html
 <!-- legacy -->
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.2/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.3/lib/overlay.min.js"></script>
 <!-- browser native es module -->
 <script type="module">
-  import { OverlayAPI } from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.2/lib/overlay.esm.min.js';
+  import { OverlayAPI } from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.3/lib/overlay.esm.min.js';
   const overlay = new OverlayAPI({
     extendData: true,
     silentMode: false,
@@ -67,10 +67,10 @@ Then you can add bunch of different listeners.
 ```js
 const overlay = new OverlayAPI();
 overlay.addListener('CombatData', (data) => {
-  console.log('listener of CombatData', data);
+  console.log('listener of `CombatData`', data);
 });
 overlay.addListener('ChangeZone', (data) => {
-  console.log('listener of ChangeZone', data);
+  console.log('listener of `ChangeZone`', data);
 });
 ```
 
@@ -82,7 +82,7 @@ overlay.startEvent();
 
 Once this function has been called, OverlayPlugin will start sending events. Some events will be raised immediately with current state information like `ChangeZone` or `ChangePrimaryPlayer`.
 
-After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/amzrk2/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` after you overlay URL to access the WebSocket server.
+After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` after you overlay URL to access the WebSocket server.
 
 Checkout [Development](#development) section for more details.
 
@@ -99,49 +99,53 @@ You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/
 
 ### `OverlayAPI.addListener(event, cb)`
 
-Add an event listener.
+add an event listener
 
-- `@param {String} event` Event to listen
-- `@param {Function} cb` Callback function
+- `@param {string} event` event to listen
+- `@param {Function} cb` callback function
 
 ### `OverlayAPI.removeListener(event, cb)`
 
-Remove a listener.
+remove a listener
 
-- `@param {String} event` Event type which listener belongs to
-- `@param {Function} cb` Function of which listener to remove
+- `@param {string} event` event type which listener belongs to
+- `@param {Function} cb` function which listener to remove
 
 ### `OverlayAPI.removeAllListener(event)`
 
-Remove all listener of one event type.
+remove all listener of one event type
 
-- `@param {String} event` Event type which listener belongs to
+- `@param {string} event` event type which listener belongs to
 
 ### `OverlayAPI.getAllListener(event)`
 
-Get all listeners of a event.
+get all listeners of a event
 
-- `@param {String} event` Event type which listener belongs to
+- `@param {string} event` event type which listener belongs to
+- `@return {Array<Function>}`
 
 ### `OverlayAPI.startEvent()`
 
-Start listening event.
+start listening event
 
 ### `OverlayAPI.endEncounter()`
 
-Ends current encounter and save it.
+ends current encounter and save it
+
+- `@return {Promise<any>}`
 
 ### `OverlayAPI.callHandler(msg)`
 
-This function allows you to call an overlay handler. These handlers are declared by Event Sources (either built into OverlayPlugin or loaded through addons like Cactbot). Returns a Promise.
+this function allows you to call an overlay handler, these handlers are declared by Event Sources, either built into OverlayPlugin or loaded through addons like Cactbot
 
-- `@param {Object} msg` Message send to OverlayPlugin
+- `@param {Object} msg` message send to OverlayPlugin
+- `@return {Promise<any>}`
 
-### `OverlayAPI.simulateData(fakeData)`
+### `OverlayAPI.simulateData(msg)`
 
-Pass some fake data object to start simulation, or do not pass params to disable simulation.
+simulate triggering event once
 
-- `@param {Object|undefined} fakeData` Simulation fake combat data object like <https://github.com/amzrk2/ffxiv-overlay-api/blob/master/test/fake_cn.json> or use `simulateData()` to disable it.
+- `@param {Object|undefined} msg` data same as those from OverlayPluginApi like <https://github.com/amzrk2/ffxiv-overlay-api/blob/dsrkafuu/test/fake_cn.json>
 
 ## Development
 
@@ -166,4 +170,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> Copyright © 2020-present DSRKafuU <https://amzrk2.cc/>
+> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.co>)
