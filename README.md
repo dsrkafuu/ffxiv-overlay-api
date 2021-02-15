@@ -170,4 +170,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.co>)
+> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.su>)

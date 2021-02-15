@@ -1,4 +1,4 @@
-/*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.co) | Copyright MIT License */
+/*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.su) | Copyright MIT License */
 
 import { logInfo, logError } from './components/logger';
 import { defaultOptions } from './components/defaultOptions';
