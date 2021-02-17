@@ -30,7 +30,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.3/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.4/lib/overlay.min.js"></script>
 <script>
   const overlay = new OverlayAPI({
     extendData: true,
@@ -142,7 +142,7 @@ this function allows you to call an overlay handler, these handlers are declared
 
 simulate triggering event once
 
-- `@param {Object|undefined} msg` data same as those from OverlayPluginApi like <https://github.com/amzrk2/ffxiv-overlay-api/blob/dsrkafuu/test/fake_cn.json>
+- `@param {Object|undefined} msg` data same as those from OverlayPluginApi like in <https://github.com/dsrkafuu/ffxiv-overlay-api/tree/master/test>
 
 ## Development
 
