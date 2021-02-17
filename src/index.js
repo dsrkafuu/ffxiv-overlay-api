@@ -7,22 +7,22 @@ import { extendData } from './components/extendData';
 /**
  * @class
  */
-export class OverlayAPI {
+export default class OverlayAPI {
   // settings
-  #options = {};
+  _options = {};
   // event subscribers
   // { event:string : cb:function[] }
-  #subscribers = {};
+  _subscribers = {};
   // plugin init status
-  #status = false;
+  _status = false;
   // waiting queue before api init
   // { msg:object, cb:function }[] (normal) | msg[] (ws)
-  #queue = [];
+  _queue = [];
   // websocket
-  #wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
-  #ws = null;
-  #resCounter = 0;
-  #resPromises = {};
+  _wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
+  _ws = null;
+  _resCounter = 0;
+  _resPromises = {};
 
   /**
    * init API
@@ -31,20 +31,20 @@ export class OverlayAPI {
    */
   constructor(options = {}) {
     // init options
-    this.#options = Object.assign({}, defaultOptions, options);
+    this._options = Object.assign({}, defaultOptions, options);
 
     // check mode
-    if (this.#wsURL && this.#wsURL.length > 0) {
+    if (this._wsURL && this._wsURL.length > 0) {
       // if in websocket mode
-      !this.#options.silentMode && logInfo('initializing api in websocket mode...');
-      this.#initWebSocketMode();
+      !this._options.silentMode && logInfo('initializing api in websocket mode...');
+      this._initWebSocketMode();
     } else {
       // normal mode
-      !this.#options.silentMode && logInfo('initializing api in callback mode...');
-      this.#initCallbackMode();
+      !this._options.silentMode && logInfo('initializing api in callback mode...');
+      this._initCallbackMode();
     }
-    // `common.js` #L92 binding
-    window.dispatchOverlayEvent = this.#triggerEvents.bind(this);
+    // `common.js` _L92 binding
+    window.dispatchOverlayEvent = this._triggerEvents.bind(this);
   }
 
   /**
@@ -53,22 +53,22 @@ export class OverlayAPI {
    * @param {Object} msg object to send
    * @param {Function} cb callback function
    */
-  #sendMessage(msg, cb) {
-    if (this.#ws) {
+  _sendMessage(msg, cb) {
+    if (this._ws) {
       // websocket mode
-      if (this.#status) {
+      if (this._status) {
         try {
-          this.#ws.send(JSON.stringify(msg));
+          this._ws.send(JSON.stringify(msg));
         } catch (e) {
           logError(e, msg);
           return;
         }
       } else {
-        this.#queue.push(msg);
+        this._queue.push(msg);
       }
     } else {
       // callback mode
-      if (this.#status) {
+      if (this._status) {
         try {
           window.OverlayPluginApi.callHandler(JSON.stringify(msg), cb);
         } catch (e) {
@@ -76,7 +76,7 @@ export class OverlayAPI {
           return;
         }
       } else {
-        this.#queue.push({ msg, cb });
+        this._queue.push({ msg, cb });
       }
     }
   }
@@ -86,12 +86,12 @@ export class OverlayAPI {
    * @private
    * @param {Object} msg data from OverlayPluginApi
    */
-  #triggerEvents(msg) {
+  _triggerEvents(msg) {
     // if this event type has subscribers
-    if (this.#subscribers[msg.type]) {
+    if (this._subscribers[msg.type]) {
       // trigger all this event's callback
-      for (let cb of this.#subscribers[msg.type]) {
-        if (this.#options.extendData) {
+      for (let cb of this._subscribers[msg.type]) {
+        if (this._options.extendData) {
           cb(extendData(msg));
         } else {
           cb(msg);
@@ -104,45 +104,45 @@ export class OverlayAPI {
    * init websocket connection
    * @private
    */
-  #initWebSocketMode() {
-    this.#ws = new WebSocket(this.#wsURL[1]);
+  _initWebSocketMode() {
+    this._ws = new WebSocket(this._wsURL[1]);
     // log error
-    this.#ws.addEventListener('error', (e) => {
+    this._ws.addEventListener('error', (e) => {
       logError(e);
     });
     // successfully connected WebSocket
-    this.#ws.addEventListener('open', () => {
-      !this.#options.silentMode && logInfo('websocket connected');
-      this.#status = true;
+    this._ws.addEventListener('open', () => {
+      !this._options.silentMode && logInfo('websocket connected');
+      this._status = true;
       // send all messages in queue to OverlayPlugin
-      while (this.#queue.length > 0) {
-        let msg = this.#queue.shift();
-        this.#sendMessage(msg);
+      while (this._queue.length > 0) {
+        let msg = this._queue.shift();
+        this._sendMessage(msg);
       }
-      !this.#options.silentMode && logInfo('api ready');
+      !this._options.silentMode && logInfo('api ready');
     });
     // on message loaded from WebSocket
-    this.#ws.addEventListener('message', (msg) => {
+    this._ws.addEventListener('message', (msg) => {
       try {
         msg = JSON.parse(msg.data);
       } catch (e) {
         logError(e, msg);
         return;
       }
-      if (msg.rseq !== undefined && this.#resPromises[msg.rseq]) {
-        this.#resPromises[msg.rseq](msg);
-        delete this.#resPromises[msg.rseq];
+      if (msg.rseq !== undefined && this._resPromises[msg.rseq]) {
+        this._resPromises[msg.rseq](msg);
+        delete this._resPromises[msg.rseq];
       } else {
-        this.#triggerEvents(msg);
+        this._triggerEvents(msg);
       }
     });
     // connection failed
-    this.#ws.addEventListener('close', () => {
-      this.#status = false;
-      !this.#options.silentMode && logInfo('websocket trying to reconnect...');
+    this._ws.addEventListener('close', () => {
+      this._status = false;
+      !this._options.silentMode && logInfo('websocket trying to reconnect...');
       // don't spam the server with retries
       setTimeout(() => {
-        this.#initWebSocketMode();
+        this._initWebSocketMode();
       }, 5000);
     });
   }
@@ -151,25 +151,25 @@ export class OverlayAPI {
    * init OverlayPluginApi connection
    * @private
    */
-  #initCallbackMode() {
+  _initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
-      !this.#options.silentMode && logInfo('api not ready, trying to reconnect...');
+      !this._options.silentMode && logInfo('api not ready, trying to reconnect...');
       setTimeout(() => {
-        this.#initCallbackMode();
+        this._initCallbackMode();
       }, 5000);
       return;
     }
     // api loadedpoint
-    this.#status = true;
+    this._status = true;
     // bind `this` for callback function called by OverlayAPI
-    // `common.js` #L78 binding
-    window.__OverlayCallback = this.#triggerEvents.bind(this);
+    // `common.js` _L78 binding
+    window.__OverlayCallback = this._triggerEvents.bind(this);
     // send all messages in queue to OverlayPlugin
-    while (this.#queue.length > 0) {
-      let { msg, cb } = this.#queue.shift();
-      this.#sendMessage(msg, cb);
+    while (this._queue.length > 0) {
+      let { msg, cb } = this._queue.shift();
+      this._sendMessage(msg, cb);
     }
-    !this.#options.silentMode && logInfo('api ready');
+    !this._options.silentMode && logInfo('api ready');
   }
 
   /**
@@ -179,15 +179,15 @@ export class OverlayAPI {
    * @param {Function} cb callback function
    */
   addListener(event, cb) {
-    const eventListened = this.#subscribers.hasOwnProperty(event);
+    const eventListened = this._subscribers.hasOwnProperty(event);
     // init event array
     if (!eventListened) {
-      this.#subscribers[event] = [];
+      this._subscribers[event] = [];
     }
     // push events
     if (typeof cb === 'function') {
-      this.#subscribers[event].push(cb);
-      !this.#options.silentMode && logInfo('listener', cb, 'of event', event, 'added');
+      this._subscribers[event].push(cb);
+      !this._options.silentMode && logInfo('listener', cb, 'of event', event, 'added');
     } else {
       logError('wrong params', cb);
     }
@@ -200,13 +200,13 @@ export class OverlayAPI {
    * @param {Function} cb function which listener to remove
    */
   removeListener(event, cb) {
-    const eventListened = this.#subscribers.hasOwnProperty(event);
+    const eventListened = this._subscribers.hasOwnProperty(event);
     if (eventListened) {
       if (typeof cb === 'function') {
-        let cbPos = this.#subscribers[event].indexOf(cb);
+        let cbPos = this._subscribers[event].indexOf(cb);
         if (cbPos > -1) {
-          this.#subscribers[event].splice(cbPos, 1);
-          !this.#options.silentMode && logInfo('listener', cb, 'of event', event, 'removed');
+          this._subscribers[event].splice(cbPos, 1);
+          !this._options.silentMode && logInfo('listener', cb, 'of event', event, 'removed');
         }
       } else {
         logError('wrong params', cb);
@@ -220,9 +220,9 @@ export class OverlayAPI {
    * @param {string} event event type which listener belongs to
    */
   removeAllListener(event) {
-    if (this.#subscribers[event] && this.#subscribers[event].length > 0) {
-      this.#subscribers[event] = [];
-      !this.#options.silentMode && logInfo('all listener of event', event, 'removed');
+    if (this._subscribers[event] && this._subscribers[event].length > 0) {
+      this._subscribers[event] = [];
+      !this._options.silentMode && logInfo('all listener of event', event, 'removed');
     }
   }
 
@@ -233,7 +233,7 @@ export class OverlayAPI {
    * @return {Array<Function>}
    */
   getAllListener(event) {
-    return this.#subscribers[event] ? this.#subscribers[event] : [];
+    return this._subscribers[event] ? this._subscribers[event] : [];
   }
 
   /**
@@ -241,11 +241,11 @@ export class OverlayAPI {
    * @public
    */
   startEvent() {
-    this.#sendMessage({
+    this._sendMessage({
       call: 'subscribe',
-      events: Object.keys(this.#subscribers),
+      events: Object.keys(this._subscribers),
     });
-    !this.#options.silentMode && logInfo('events', Object.keys(this.#subscribers), 'started');
+    !this._options.silentMode && logInfo('events', Object.keys(this._subscribers), 'started');
   }
 
   /**
@@ -254,12 +254,12 @@ export class OverlayAPI {
    * @return {Promise<any>}
    */
   endEncounter() {
-    if (this.#status) {
+    if (this._status) {
       return window.OverlayPluginApi.endEncounter();
     } else {
       logError('plugin not ready yet');
     }
-    !this.#options.silentMode && logInfo('encounter ended');
+    !this._options.silentMode && logInfo('encounter ended');
   }
 
   /**
@@ -272,15 +272,15 @@ export class OverlayAPI {
    */
   callHandler(msg) {
     let p;
-    if (this.#ws) {
-      msg.rseq = this.#resCounter++;
+    if (this._ws) {
+      msg.rseq = this._resCounter++;
       p = new Promise((resolve) => {
-        this.#resPromises[msg.rseq] = resolve;
+        this._resPromises[msg.rseq] = resolve;
       });
-      this.#sendMessage(msg);
+      this._sendMessage(msg);
     } else {
       p = new Promise((resolve) => {
-        this.#sendMessage(msg, (data) => {
+        this._sendMessage(msg, (data) => {
           let rd;
           try {
             rd = data == null ? null : JSON.parse(data);
@@ -301,6 +301,6 @@ export class OverlayAPI {
    * @param {Object} msg data same as those from OverlayPluginApi
    */
   simulateData(msg) {
-    this.#triggerEvents(msg);
+    this._triggerEvents(msg);
   }
 }

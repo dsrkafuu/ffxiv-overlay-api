@@ -30,11 +30,8 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<!-- legacy -->
 <script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.3/lib/overlay.min.js"></script>
-<!-- browser native es module -->
-<script type="module">
-  import { OverlayAPI } from 'https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.3/lib/overlay.esm.min.js';
+<script>
   const overlay = new OverlayAPI({
     extendData: true,
     silentMode: false,
@@ -47,7 +44,7 @@ Or import the library from jsDelivr CDN:
 After installation, you can import the library:
 
 ```js
-import { OverlayAPI } from 'ffxiv-overlay-api';
+import OverlayAPI from 'ffxiv-overlay-api';
 const overlay = new OverlayAPI();
 ```
 

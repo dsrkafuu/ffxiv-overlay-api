@@ -24,33 +24,24 @@
       <h4>Data received:</h4>
       <div id="data"></div>
     </main>
-    <script src="../lib/index.js"></script>
+    <script src="../lib/overlay.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
     <script>
-      //Init API
+      // init api
       const overlay = new OverlayAPI({
         extendData: true,
         silentMode: false,
       });
-      // Add listener
+      // add listener
       overlay.addListener('ChangeZone', (data) => {
         console.log('new listener of ChangeZone', data);
       });
-      // List ChangeZone listeners
+      // list `ChangeZone` listeners
       console.log(overlay.getAllListener('ChangeZone'));
-      // Remove unused listeners
+      // remove unused listeners
       overlay.removeAllListener('ChangeZone');
 
-      // Pass some fake data for development simulation
-      fetch('./fake_cn.json')
-        .then((res) => res.json())
-        .then((obj) => {
-          setInterval(() => {
-            overlay.simulateData(obj);
-          }, 1000);
-        });
-
-      // Add listener to display
+      // add listener to display
       overlay.addListener('CombatData', (data) => {
         if (document.getElementById('data').childNodes.length > 0) {
           document.getElementById('data').innerHTML = '';
@@ -59,6 +50,15 @@
         document.getElementById('data').appendChild(formatter.render());
       });
       overlay.startEvent();
+
+      // pass some fake data for development simulation
+      fetch('./fake.json')
+        .then((res) => res.json())
+        .then((obj) => {
+          setInterval(() => {
+            overlay.simulateData(obj);
+          }, 1000);
+        });
     </script>
   </body>
 </html>
