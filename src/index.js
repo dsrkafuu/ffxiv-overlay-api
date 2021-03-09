@@ -18,8 +18,9 @@ export default class OverlayAPI {
   // waiting queue before api init
   // { msg:object, cb:function }[] (normal) | msg[] (ws)
   _queue = [];
-  // websocket
-  _wsURL = /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href);
+  _wsURL =
+    /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href) ||
+    /[?&]HOST_PORT=([^&]+)/.exec(window.location.href);
   _ws = null;
   _resCounter = 0;
   _resPromises = {};
@@ -34,7 +35,7 @@ export default class OverlayAPI {
     this._options = Object.assign({}, defaultOptions, options);
 
     // check mode
-    if (this._wsURL && this._wsURL.length > 0) {
+    if (this._wsURL && this._wsURL.length > 1) {
       // if in websocket mode
       !this._options.silentMode && logInfo('initializing api in websocket mode...');
       this._initWebSocketMode();
@@ -105,7 +106,12 @@ export default class OverlayAPI {
    * @private
    */
   _initWebSocketMode() {
-    this._ws = new WebSocket(this._wsURL[1]);
+    // legacy ws url support
+    let wsURL = this._wsURL[1];
+    if (!wsURL.includes('/ws')) {
+      wsURL += (wsURL.endsWith('/') ? '' : '/') + 'ws';
+    }
+    this._ws = new WebSocket(wsURL);
     // log error
     this._ws.addEventListener('error', (e) => {
       logError(e);

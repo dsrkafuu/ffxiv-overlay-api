@@ -79,7 +79,7 @@ overlay.startEvent();
 
 Once this function has been called, OverlayPlugin will start sending events. Some events will be raised immediately with current state information like `ChangeZone` or `ChangePrimaryPlayer`.
 
-After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` after you overlay URL to access the WebSocket server.
+After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` or `?HOST_PORT=ws://127.0.0.1:[port]` after you overlay URL to access the WebSocket server.
 
 Checkout [Development](#development) section for more details.
 
@@ -153,7 +153,7 @@ npm install
 npm start
 ```
 
-You can access the test overlay at `http://localhost:5000/test/` and `http://localhost:5000/test/?OVERLAY_WS=ws://127.0.0.1:[port]/ws`.
+You can access the test overlay at `http://localhost:5000/test/`, `http://localhost:5000/test/?OVERLAY_WS=ws://127.0.0.1:[port]/ws` or `http://localhost:5000/test/?HOST_PORT=ws://127.0.0.1:[port]`.
 
 Remember to run `npm run build` before release commit.
 
