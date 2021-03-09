@@ -11,6 +11,7 @@
   "author": "DSRKafuU <dsrkafuu@outlook.com> (https://dsrkafuu.su)",
   "homepage": "https://github.com/dsrkafuu/ffxiv-overlay-api#readme",
   "license": "MIT",
+  "type": "module",
   "main": "lib/index.esm.js",
   "repository": "github:dsrkafuu/ffxiv-overlay-api",
   "devDependencies": {
