@@ -3,8 +3,7 @@ import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
-const BANNER =
-  '/*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.su) | Copyright MIT License */';
+const BANNER = `/*! ffxiv-overlay-plugin v${pkg.version} | DSRKafuU (https://dsrkafuu.su) | Copyright MIT License */`;
 
 export default {
   input: './src/index.js',
