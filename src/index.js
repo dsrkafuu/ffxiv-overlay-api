@@ -1,5 +1,3 @@
-/*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.su) | Copyright MIT License */
-
 import { logInfo, logError } from './components/logger';
 import { defaultOptions } from './components/defaultOptions';
 import { extendData } from './components/extendData';
