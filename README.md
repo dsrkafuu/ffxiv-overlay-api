@@ -11,6 +11,7 @@ This library needs to be used along with [ngld/OverlayPlugin](https://github.com
 
 ## Table of Contents
 
+- [Browsers](#browsers)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Options](#options)
@@ -18,6 +19,15 @@ This library needs to be used along with [ngld/OverlayPlugin](https://github.com
 - [Development](#development)
 - [Contributon](#contributon)
 - [Annotations](#annotations)
+
+## Browsers
+
+Need to be used with [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin). For WebSocket mode, only these browsers below are officially supported:
+
+- Chrome (Chromium) >= 80
+- Safari >= 13 (macOS >= 10.15)
+- Edge >= 80 (new Edge with Chromium)
+- Firefox >= 80
 
 ## Installation
 
@@ -167,4 +177,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.su>)
+> Copyright © 2020-present DSRKafuU MIT License (<https://dsrkafuu.su>)
