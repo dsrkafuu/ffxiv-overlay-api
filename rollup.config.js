@@ -1,4 +1,5 @@
 import { babel } from '@rollup/plugin-babel';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
@@ -23,5 +24,8 @@ export default {
       banner: BANNER,
     },
   ],
-  plugins: [babel({ babelHelpers: 'bundled' })],
+  plugins: [
+    nodeResolve({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
+    babel({ babelHelpers: 'bundled', extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
+  ],
 };

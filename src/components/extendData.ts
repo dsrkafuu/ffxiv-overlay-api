@@ -1,9 +1,9 @@
+import { CombatDataResMessage, ExtendCombatData } from '../types';
+
 /**
  * parse job type
- * @param {string} jobName
- * @return {'dps'|'heal'|'tank'|'others'}
  */
-function parseJob(jobName) {
+function parseJob(jobName: string) {
   jobName = jobName.toLowerCase();
 
   const dps = [
@@ -42,10 +42,8 @@ function parseJob(jobName) {
 
 /**
  * parse single player
- * @param {Object} data
- * @return {Object}
  */
-function parsePlayer(data) {
+function parsePlayer(data: any) {
   let [maxHit, maxHitDamage] = ['', 0];
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
@@ -101,10 +99,8 @@ function parsePlayer(data) {
 
 /**
  * parse encounter data
- * @param {Object} data
- * @return {Object}
  */
-function parseEncounter(data) {
+function parseEncounter(data: any) {
   return {
     duration: data.duration,
     durationSeconds: Number.parseInt(data.DURATION),
@@ -123,10 +119,8 @@ function parseEncounter(data) {
 
 /**
  * parse LB data
- * @param {Object} data
- * @return {Object}
  */
-function parseLimitBreak(data) {
+function parseLimitBreak(data: any) {
   let maxHit = '';
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
@@ -154,34 +148,31 @@ function parseLimitBreak(data) {
 
 /**
  * insert extended data
- * @param {Object} data data from OverlayPlugin
- * @return {Object}
  */
-export function extendData(data) {
-  if (data.type === 'CombatData') {
-    // common data
-    const parsedData = {
-      isActive: data.isActive === 'true' || data.isActive === true,
-      encounter: parseEncounter(data.Encounter),
-      combatant: [],
-    };
+export function extendData(data: CombatDataResMessage) {
+  // common data
+  const parsedData = {
+    isActive: data.isActive === 'true' || data.isActive === true,
+    encounter: parseEncounter(data.Encounter),
+    combatant: [],
+  };
 
-    // combatant
-    const combatantKeys = Object.keys(data.Combatant);
-    const combatantValidKeys = combatantKeys.filter((key) => data.Combatant.hasOwnProperty(key));
-    combatantValidKeys.forEach((key) => {
-      let cbt;
-      if (key === 'Limit Break') {
-        cbt = parseLimitBreak(data.Combatant[key]);
-      } else {
-        cbt = parsePlayer(data.Combatant[key]);
-      }
-      if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
-        parsedData.combatant.push(cbt);
-      }
-    });
+  // combatant
+  const combatantKeys = Object.keys(data.Combatant);
+  const combatantValidKeys = combatantKeys.filter((key) => data.Combatant.hasOwnProperty(key));
+  combatantValidKeys.forEach((key) => {
+    let cbt;
+    if (key === 'Limit Break') {
+      cbt = parseLimitBreak(data.Combatant[key]);
+    } else {
+      cbt = parsePlayer(data.Combatant[key]);
+    }
+    if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
+      (parsedData.combatant as any).push(cbt);
+    }
+  });
 
-    data.extendData = parsedData;
-  }
+  const extendData: ExtendCombatData = parsedData;
+  data.extendData = extendData;
   return data;
 }
