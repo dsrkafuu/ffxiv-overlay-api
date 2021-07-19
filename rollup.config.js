@@ -6,7 +6,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 const BANNER = `/*! ffxiv-overlay-plugin v${pkg.version} | DSRKafuU (https://dsrkafuu.su) | Copyright (c) MIT License */`;
 
 export default {
-  input: './src/index.js',
+  input: './src/index.ts',
   output: [
     {
       file: pkg.main,
