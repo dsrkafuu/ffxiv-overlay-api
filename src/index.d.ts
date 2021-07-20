@@ -62,7 +62,7 @@ interface CombatantData {
 interface ExtendData {
   isActive: boolean;
   encounter: EncounterData;
-  limitBreak: LimitBreakData;
+  limitBreak?: LimitBreakData;
   combatant: CombatantData;
 }
 
