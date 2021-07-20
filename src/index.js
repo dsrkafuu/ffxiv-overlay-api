@@ -2,10 +2,10 @@ import { logInfo, logError } from './components/logger';
 import { defaultOptions } from './components/defaultOptions';
 import { extendData } from './components/extendData';
 
-/**
- * @class
- */
 export default class OverlayAPI {
+  // singleton
+  static _instance = null;
+
   // settings
   _options = {};
   // event subscribers
@@ -14,26 +14,31 @@ export default class OverlayAPI {
   // plugin init status
   _status = false;
   // waiting queue before api init
-  // { msg:object, cb:function }[] (normal) | msg[] (ws)
+  // { msg:object, cb?:function }[]
   _queue = [];
   _wsURL =
-    /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href) ||
-    /[?&]HOST_PORT=([^&]+)/.exec(window.location.href);
+    Array.from(
+      /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href) ||
+        /[?&]HOST_PORT=([^&]+)/.exec(window.location.href) ||
+        []
+    )[1] || '';
   _ws = null;
   _resCounter = 0;
   _resPromises = {};
 
   /**
    * init API
-   * @constructor
-   * @param {Object} options
    */
   constructor(options = {}) {
-    // init options
-    this._options = Object.assign({}, defaultOptions, options);
+    // singleton
+    if (OverlayAPI._instance) {
+      return OverlayAPI._instance;
+    }
 
+    // init options
+    this._options = Object.assign(this._options, defaultOptions, options);
     // check mode
-    if (this._wsURL && this._wsURL.length > 1) {
+    if (this._wsURL) {
       // if in websocket mode
       !this._options.silentMode && logInfo('initializing api in websocket mode...');
       this._initWebSocketMode();
@@ -44,13 +49,15 @@ export default class OverlayAPI {
     }
     // `common.js` _L92 binding
     window.dispatchOverlayEvent = this._triggerEvents.bind(this);
+
+    // singleton
+    if (!OverlayAPI._instance) {
+      OverlayAPI._instance = this;
+    }
   }
 
   /**
    * send message to OverlayPluginApi or push into queue before its init
-   * @private
-   * @param {Object} msg object to send
-   * @param {Function} cb callback function
    */
   _sendMessage(msg, cb) {
     if (this._ws) {
@@ -63,7 +70,7 @@ export default class OverlayAPI {
           return;
         }
       } else {
-        this._queue.push(msg);
+        this._queue.push({ msg });
       }
     } else {
       // callback mode
@@ -82,8 +89,6 @@ export default class OverlayAPI {
 
   /**
    * trigger event function, called by OverlayPluginApi, need `this` binding
-   * @private
-   * @param {Object} msg data from OverlayPluginApi
    */
   _triggerEvents(msg) {
     // if this event type has subscribers
@@ -91,7 +96,7 @@ export default class OverlayAPI {
       // trigger all this event's callback
       for (let cb of this._subscribers[msg.type]) {
         if (this._options.extendData) {
-          cb(extendData(msg));
+          cb(extendData(msg, this._options.seperateLB));
         } else {
           cb(msg);
         }
@@ -101,15 +106,14 @@ export default class OverlayAPI {
 
   /**
    * init websocket connection
-   * @private
    */
   _initWebSocketMode() {
     // legacy ws url support
-    let wsURL = this._wsURL[1];
-    if (!wsURL.includes('/ws')) {
-      wsURL += (wsURL.endsWith('/') ? '' : '/') + 'ws';
+    let url = this._wsURL;
+    if (!url.includes('/ws')) {
+      url += (url.endsWith('/') ? '' : '/') + 'ws';
     }
-    this._ws = new WebSocket(wsURL);
+    this._ws = new WebSocket(url);
     // log error
     this._ws.addEventListener('error', (e) => {
       logError(e);
@@ -120,7 +124,7 @@ export default class OverlayAPI {
       this._status = true;
       // send all messages in queue to OverlayPlugin
       while (this._queue.length > 0) {
-        let msg = this._queue.shift();
+        const { msg } = this._queue.shift();
         this._sendMessage(msg);
       }
       !this._options.silentMode && logInfo('api ready');
@@ -153,7 +157,6 @@ export default class OverlayAPI {
 
   /**
    * init OverlayPluginApi connection
-   * @private
    */
   _initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
@@ -170,7 +173,7 @@ export default class OverlayAPI {
     window.__OverlayCallback = this._triggerEvents.bind(this);
     // send all messages in queue to OverlayPlugin
     while (this._queue.length > 0) {
-      let { msg, cb } = this._queue.shift();
+      const { msg, cb } = this._queue.shift();
       this._sendMessage(msg, cb);
     }
     !this._options.silentMode && logInfo('api ready');
@@ -178,14 +181,10 @@ export default class OverlayAPI {
 
   /**
    * add an event listener
-   * @public
-   * @param {string} event event to listen
-   * @param {Function} cb callback function
    */
   addListener(event, cb) {
-    const eventListened = this._subscribers.hasOwnProperty(event);
     // init event array
-    if (!eventListened) {
+    if (!this._subscribers[event]) {
       this._subscribers[event] = [];
     }
     // push events
@@ -199,13 +198,9 @@ export default class OverlayAPI {
 
   /**
    * remove a listener
-   * @public
-   * @param {string} event event type which listener belongs to
-   * @param {Function} cb function which listener to remove
    */
   removeListener(event, cb) {
-    const eventListened = this._subscribers.hasOwnProperty(event);
-    if (eventListened) {
+    if (this._subscribers[event]) {
       if (typeof cb === 'function') {
         let cbPos = this._subscribers[event].indexOf(cb);
         if (cbPos > -1) {
@@ -220,8 +215,6 @@ export default class OverlayAPI {
 
   /**
    * remove all listener of one event type
-   * @public
-   * @param {string} event event type which listener belongs to
    */
   removeAllListener(event) {
     if (this._subscribers[event] && this._subscribers[event].length > 0) {
@@ -232,9 +225,6 @@ export default class OverlayAPI {
 
   /**
    * get all listeners of a event
-   * @public
-   * @param {string} event event type which listener belongs to
-   * @return {Array<Function>}
    */
   getAllListener(event) {
     return this._subscribers[event] ? this._subscribers[event] : [];
@@ -242,7 +232,6 @@ export default class OverlayAPI {
 
   /**
    * start listening event
-   * @public
    */
   startEvent() {
     this._sendMessage({
@@ -254,8 +243,6 @@ export default class OverlayAPI {
 
   /**
    * ends current encounter and save it
-   * @public
-   * @return {Promise<any>}
    */
   endEncounter() {
     if (this._status) {
@@ -270,9 +257,6 @@ export default class OverlayAPI {
    * this function allows you to call an overlay handler,
    * these handlers are declared by Event Sources,
    * either built into OverlayPlugin or loaded through addons like Cactbot
-   * @public
-   * @param {Object} msg message send to OverlayPlugin
-   * @return {Promise<any>}
    */
   callHandler(msg) {
     let p;
@@ -283,7 +267,7 @@ export default class OverlayAPI {
       });
       this._sendMessage(msg);
     } else {
-      p = new Promise((resolve) => {
+      p = new Promise((resolve, reject) => {
         this._sendMessage(msg, (data) => {
           let rd;
           try {
@@ -301,8 +285,6 @@ export default class OverlayAPI {
 
   /**
    * simulate triggering event once
-   * @public
-   * @param {Object} msg data same as those from OverlayPluginApi
    */
   simulateData(msg) {
     this._triggerEvents(msg);

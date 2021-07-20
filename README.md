@@ -89,6 +89,7 @@ Checkout [Development](#development) section for more details.
 | ------------ | ------- | ------------------------------------------------------- |
 | `extendData` | `true`  | Parse and add cleaner data to listeners of `CombatData` |
 | `silentMode` | `false` | For production use, do not log all API stats info       |
+| `seperateLB` | `false` | Separate Limit Break data from Combatant data           |
 
 ## API
 
@@ -98,27 +99,27 @@ You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/
 
 add an event listener
 
-- `@param {string} event` event to listen
+- `@param {EventType} event` event to listen
 - `@param {Function} cb` callback function
 
 ### `OverlayAPI.removeListener(event, cb)`
 
 remove a listener
 
-- `@param {string} event` event type which listener belongs to
+- `@param {EventType} event` event type which listener belongs to
 - `@param {Function} cb` function which listener to remove
 
 ### `OverlayAPI.removeAllListener(event)`
 
 remove all listener of one event type
 
-- `@param {string} event` event type which listener belongs to
+- `@param {EventType} event` event type which listener belongs to
 
 ### `OverlayAPI.getAllListener(event)`
 
 get all listeners of a event
 
-- `@param {string} event` event type which listener belongs to
+- `@param {EventType} event` event type which listener belongs to
 - `@return {Array<Function>}`
 
 ### `OverlayAPI.startEvent()`
@@ -135,14 +136,14 @@ ends current encounter and save it
 
 this function allows you to call an overlay handler, these handlers are declared by Event Sources, either built into OverlayPlugin or loaded through addons like Cactbot
 
-- `@param {Object} msg` message send to OverlayPlugin
-- `@return {Promise<any>}`
+- `@param {HandlerMessage} msg` message send to OverlayPlugin
+- `@return {Promise<EventMessage>}`
 
 ### `OverlayAPI.simulateData(msg)`
 
 simulate triggering event once
 
-- `@param {Object|undefined} msg` data same as those from OverlayPluginApi like in <https://github.com/dsrkafuu/ffxiv-overlay-api/tree/master/test>
+- `@param {EventMessage} msg` data same as those from OverlayPluginApi like in <https://github.com/dsrkafuu/ffxiv-overlay-api/tree/master/test>
 
 ## Development
 

@@ -55,9 +55,7 @@
       fetch('./fake.json')
         .then((res) => res.json())
         .then((obj) => {
-          setInterval(() => {
-            overlay.simulateData(obj);
-          }, 1000);
+          overlay.simulateData(obj);
         });
     </script>
   </body>

@@ -1,7 +1,5 @@
 /**
  * parse job type
- * @param {string} jobName
- * @return {'dps'|'heal'|'tank'|'others'}
  */
 function parseJob(jobName) {
   jobName = jobName.toLowerCase();
@@ -42,8 +40,6 @@ function parseJob(jobName) {
 
 /**
  * parse single player
- * @param {Object} data
- * @return {Object}
  */
 function parsePlayer(data) {
   let [maxHit, maxHitDamage] = ['', 0];
@@ -76,21 +72,21 @@ function parsePlayer(data) {
     deaths: Number.parseInt(data.deaths),
 
     directHits: Number.parseInt(data.DirectHitCount),
-    directHitPct: data.DirectHitPct,
+    directHitPct: data.DirectHitPct || '',
     critHits: Number.parseInt(data.crithits),
-    critHitPct: data['crithit%'],
+    critHitPct: data['crithit%'] || '',
     directCritHits: Number.parseInt(data.CritDirectHitCount),
-    directCritHitPct: data.CritDirectHitPct,
+    directCritHitPct: data.CritDirectHitPct || '',
 
     damage: Number.parseInt(data.damage),
     damageTaken: Number.parseInt(data.damagetaken),
-    damagePct: data['damage%'],
+    damagePct: data['damage%'] || '',
 
     healed: Number.parseInt(data.healed),
     healsTaken: Number.parseInt(data.healstaken),
-    healsPct: data['healed%'],
+    healsPct: data['healed%'] || '',
     overHeal: Number.parseInt(data.overHeal),
-    overHealPct: data.OverHealPct,
+    overHealPct: data.OverHealPct || '',
 
     maxHit,
     maxHitDamage,
@@ -101,14 +97,12 @@ function parsePlayer(data) {
 
 /**
  * parse encounter data
- * @param {Object} data
- * @return {Object}
  */
 function parseEncounter(data) {
   return {
-    duration: data.duration,
+    duration: data.duration || '',
     durationSeconds: Number.parseInt(data.DURATION),
-    zoneName: data.CurrentZoneName,
+    zoneName: data.CurrentZoneName || '',
 
     dps: Number.parseInt(data.encdps),
     last10DPS: Number.parseInt(data.Last10DPS),
@@ -123,8 +117,6 @@ function parseEncounter(data) {
 
 /**
  * parse LB data
- * @param {Object} data
- * @return {Object}
  */
 function parseLimitBreak(data) {
   let maxHit = '';
@@ -153,11 +145,9 @@ function parseLimitBreak(data) {
 }
 
 /**
- * insert extended data
- * @param {Object} data data from OverlayPlugin
- * @return {Object}
+ * inject extended data
  */
-export function extendData(data) {
+export function extendData(data, seperateLB) {
   if (data.type === 'CombatData') {
     // common data
     const parsedData = {
@@ -170,14 +160,16 @@ export function extendData(data) {
     const combatantKeys = Object.keys(data.Combatant);
     const combatantValidKeys = combatantKeys.filter((key) => data.Combatant.hasOwnProperty(key));
     combatantValidKeys.forEach((key) => {
-      let cbt;
       if (key === 'Limit Break') {
-        cbt = parseLimitBreak(data.Combatant[key]);
+        const cbt = parseLimitBreak(data.Combatant[key]);
+        if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
+          seperateLB ? (parsedData.limitBreak = cbt) : parsedData.combatant.push(cbt);
+        }
       } else {
-        cbt = parsePlayer(data.Combatant[key]);
-      }
-      if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
-        parsedData.combatant.push(cbt);
+        const cbt = parsePlayer(data.Combatant[key]);
+        if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
+          parsedData.combatant.push(cbt);
+        }
       }
     });
 

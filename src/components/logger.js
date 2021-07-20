@@ -1,6 +1,5 @@
 /**
  * console info logger
- * @param {...any} params
  */
 export function logInfo(...params) {
   console.info('[ffxiv-overlay-api]', ...params);
@@ -8,7 +7,6 @@ export function logInfo(...params) {
 
 /**
  * console error logger
- * @param {...any} params
  */
 export function logError(...params) {
   console.error('[ffxiv-overlay-api]', ...params);
