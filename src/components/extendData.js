@@ -158,7 +158,9 @@ export function extendData(data, seperateLB) {
 
     // combatant
     const combatantKeys = Object.keys(data.Combatant);
-    const combatantValidKeys = combatantKeys.filter((key) => data.Combatant.hasOwnProperty(key));
+    const combatantValidKeys = combatantKeys.filter((key) =>
+      Object.prototype.hasOwnProperty.call(data.Combatant, key)
+    );
     combatantValidKeys.forEach((key) => {
       if (key === 'Limit Break') {
         const cbt = parseLimitBreak(data.Combatant[key]);
