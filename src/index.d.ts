@@ -63,7 +63,7 @@ interface ExtendData {
   isActive: boolean;
   encounter: EncounterData;
   limitBreak?: LimitBreakData;
-  combatant: CombatantData;
+  combatant: CombatantData[];
 }
 
 type EventType =
