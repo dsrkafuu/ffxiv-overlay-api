@@ -99,6 +99,7 @@ interface HandlerMessage {
 }
 
 export default class OverlayAPI {
+  static mergeCombatant(...args: CombatantData[]): CombatantData;
   constructor(options: OverlayOptions);
   addListener(event: EventType, cb: EventCallback): void;
   removeListener(event: EventType, cb: EventCallback): void;

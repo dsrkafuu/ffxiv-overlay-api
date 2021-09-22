@@ -30,7 +30,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.5/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.6/lib/overlay.min.js"></script>
 <script>
   const overlay = new OverlayAPI({
     extendData: true,
@@ -95,55 +95,61 @@ Checkout [Development](#development) section for more details.
 
 You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/event_types>.
 
-### `OverlayAPI.addListener(event, cb)`
+### `new OverlayAPI().addListener(event, cb)`
 
 add an event listener
 
 - `@param {EventType} event` event to listen
 - `@param {Function} cb` callback function
 
-### `OverlayAPI.removeListener(event, cb)`
+### `new OverlayAPI().removeListener(event, cb)`
 
 remove a listener
 
 - `@param {EventType} event` event type which listener belongs to
 - `@param {Function} cb` function which listener to remove
 
-### `OverlayAPI.removeAllListener(event)`
+### `new OverlayAPI().removeAllListener(event)`
 
 remove all listener of one event type
 
 - `@param {EventType} event` event type which listener belongs to
 
-### `OverlayAPI.getAllListener(event)`
+### `new OverlayAPI().getAllListener(event)`
 
 get all listeners of a event
 
 - `@param {EventType} event` event type which listener belongs to
 - `@return {Array<Function>}`
 
-### `OverlayAPI.startEvent()`
+### `new OverlayAPI().startEvent()`
 
 start listening event
 
-### `OverlayAPI.endEncounter()`
+### `new OverlayAPI().endEncounter()`
 
 ends current encounter and save it
 
 - `@return {Promise<any>}`
 
-### `OverlayAPI.callHandler(msg)`
+### `new OverlayAPI().callHandler(msg)`
 
 this function allows you to call an overlay handler, these handlers are declared by Event Sources, either built into OverlayPlugin or loaded through addons like Cactbot
 
 - `@param {HandlerMessage} msg` message send to OverlayPlugin
 - `@return {Promise<EventMessage>}`
 
-### `OverlayAPI.simulateData(msg)`
+### `new OverlayAPI().simulateData(msg)`
 
 simulate triggering event once
 
 - `@param {EventMessage} msg` data same as those from OverlayPluginApi like in <https://github.com/dsrkafuu/ffxiv-overlay-api/tree/master/test>
+
+### `OverlayAPI.mergeCombatant(...args)`
+
+static function for merging combatant like pets into first player arg
+
+- `@param {...CombatantData} args`
 
 ## Development
 

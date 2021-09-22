@@ -1,10 +1,13 @@
 import { logInfo, logError } from './components/logger';
 import { defaultOptions } from './components/defaultOptions';
 import { extendData } from './components/extendData';
+import { mergeCombatant } from './components/mergeCombatant';
 
 export default class OverlayAPI {
   // singleton
   static _instance = null;
+  // function for merging combatant like pets into first player arg
+  static mergeCombatant = mergeCombatant;
 
   // settings
   _options = {};
