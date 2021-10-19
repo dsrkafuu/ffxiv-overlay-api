@@ -8,7 +8,6 @@ on:
 jobs:
   publish-beta:
     if: "github.event.release.prerelease"
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
