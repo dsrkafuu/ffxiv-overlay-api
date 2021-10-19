@@ -2,3 +2,4 @@ src/source/**
 rollup.config.js
 lib/**
 node_modules/**
+*.ts

@@ -5,26 +5,49 @@ function parseJob(jobName) {
   jobName = jobName.toLowerCase();
 
   const dps = [
-    'acn',
-    'arc',
-    'blm',
-    'brd',
-    'drg',
-    'dnc',
-    'lnc',
-    'mch',
-    'mnk',
-    'nin',
     'pgl',
     'pug',
-    'rdm',
+    'mnk',
     'rog',
-    'sam',
+    'nin',
+    'lnc',
+    'drg',
+    'arc',
+    'brd',
+    'acn',
     'smn',
     'thm',
+    'blm',
+    // heavensward
+    'mch',
+    // stormblood
+    'rdm',
+    'sam',
+    // shadowbringers
+    'dnc',
+    // endwalker
+    'rpr',
   ];
-  const heal = ['ast', 'cnj', 'sch', 'whm'];
-  const tank = ['drk', 'gla', 'gld', 'gnb', 'mrd', 'pld', 'war'];
+  const heal = [
+    'cnj',
+    'whm',
+    'sch',
+    // heavensward
+    'ast',
+    // endwalker
+    'sge',
+  ];
+  const tank = [
+    'gla',
+    'gld',
+    'pld',
+    'mrd',
+    'war',
+    // heavensward
+    'drk',
+    // shadowbringers
+    'gnb',
+  ];
 
   if (dps.includes(jobName)) {
     return 'dps';
