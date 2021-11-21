@@ -30,7 +30,7 @@ npm install ffxiv-overlay-api --save
 Or import the library from jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@3.6/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4/lib/overlay.min.js"></script>
 <script>
   const overlay = new OverlayAPI({
     extendData: true,
@@ -81,7 +81,7 @@ Once this function has been called, OverlayPlugin will start sending events. Som
 
 After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket URL when enabled. Checkout the [index.html](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/test/index.html) for example usage, you can download this file and load it from the OverlayPlugin. Enable WebSocked in your plugin and add `?OVERLAY_WS=ws://127.0.0.1:[port]/ws` or `?HOST_PORT=ws://127.0.0.1:[port]` after you overlay URL to access the WebSocket server.
 
-Checkout [Development](#development) section for more details.
+Checkout [Development](#development) section for more details and my new overlay [Skyline Overlay](https://github.com/dsrkafuu/skyline-overlay) for example.
 
 ## Options
 
@@ -174,4 +174,4 @@ Please use the `.prettierrc` at the root of the project along with [Prettier def
 - [hibiyasleep/OverlayPlugin](https://github.com/hibiyasleep/OverlayPlugin) - MIT License
 - [RainbowMage/OverlayPlugin](https://github.com/RainbowMage/OverlayPlugin) - MIT License
 
-> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.su>)
+> Copyright © 2020-present DSRKafuU (<https://dsrkafuu.net>)

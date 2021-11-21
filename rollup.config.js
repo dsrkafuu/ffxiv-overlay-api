@@ -4,7 +4,7 @@ import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
-const BANNER = `/*! ffxiv-overlay-plugin v${pkg.version} | DSRKafuU (https://dsrkafuu.su) | Copyright (c) MIT License */`;
+const BANNER = `/*! ffxiv-overlay-plugin v${pkg.version} | DSRKafuU (https://dsrkafuu.net) | Copyright (c) MIT License */`;
 
 export default {
   input: './src/index.js',
