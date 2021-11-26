@@ -5,60 +5,66 @@ function parseJob(jobName) {
   jobName = jobName.toLowerCase();
 
   const dps = [
-    'pgl',
-    'pug',
-    'mnk',
-    'rog',
-    'nin',
-    'lnc',
-    'drg',
-    'arc',
-    'brd',
+    // base
     'acn',
-    'smn',
+    'arc',
+    'lnc',
+    'pgl',
+    'rog',
     'thm',
-    'blm',
-    // heavensward
-    'mch',
-    // stormblood
-    'rdm',
+    // melee
+    'drg',
+    'mnk',
+    'nin',
     'sam',
-    // shadowbringers
-    'dnc',
-    // endwalker
     'rpr',
+    // magical ranged
+    'smn',
+    'blm',
+    'rdm',
+    // physical ranged
+    'brd',
+    'mch',
+    'dnc',
+    // special
+    'blu',
   ];
-  const heal = [
+  const healer = [
+    // base
     'cnj',
+    // add
     'whm',
     'sch',
-    // heavensward
     'ast',
-    // endwalker
     'sge',
   ];
   const tank = [
+    // base
     'gla',
-    'gld',
-    'pld',
     'mrd',
+    // add
+    'pld',
     'war',
-    // heavensward
     'drk',
-    // shadowbringers
     'gnb',
   ];
 
+  const hand = ['crp', 'bsm', 'arm', 'gsm', 'lwr', 'wvr', 'alc', 'cul'];
+  const land = ['bot', 'fsh', 'min'];
+
   if (dps.includes(jobName)) {
     return 'dps';
-  }
-  if (heal.includes(jobName)) {
-    return 'heal';
-  }
-  if (tank.includes(jobName)) {
+  } else if (healer.includes(jobName)) {
+    return 'healer';
+  } else if (tank.includes(jobName)) {
     return 'tank';
+  } else if (hand.includes(jobName)) {
+    return 'hand';
+  } else if (land.includes(jobName)) {
+    return 'land';
+  } else {
+    return 'unknown';
   }
-  return 'others';
 }
 
 /**

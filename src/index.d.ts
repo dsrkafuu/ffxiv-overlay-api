@@ -32,7 +32,7 @@ export interface LimitBreakData {
 export interface CombatantData {
   name: string;
   job: string;
-  jobType: 'dps' | 'heal' | 'tank' | 'others';
+  jobType: 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
   dps: number;
   last10DPS: number;
   last30DPS: number;
@@ -134,7 +134,7 @@ declare namespace OverlayAPI {
   export interface CombatantData {
     name: string;
     job: string;
-    jobType: 'dps' | 'heal' | 'tank' | 'others';
+    jobType: 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
     dps: number;
     last10DPS: number;
     last30DPS: number;
