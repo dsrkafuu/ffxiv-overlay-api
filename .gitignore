@@ -49,7 +49,6 @@ node_modules/
 package-lock.json
 jspm_packages/
 package-lock.json
-pnpm-lock.yaml
 .pnpm-store/
 
 # Snowpack dependency directory (https://snowpack.dev/)
