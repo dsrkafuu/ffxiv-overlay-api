@@ -123,6 +123,7 @@ declare namespace OverlayAPI {
     hps: number;
     damage: number;
     healed: number;
+    shield: number;
   }
 
   export interface LimitBreakData {
@@ -131,6 +132,7 @@ declare namespace OverlayAPI {
     hps: number;
     damage: number;
     healed: number;
+    shield: number;
     maxHit: string;
     maxHeal: string;
   }
@@ -161,6 +163,8 @@ declare namespace OverlayAPI {
     healsPct: string;
     overHeal: number;
     overHealPct: string;
+    shield: number;
+    shieldPct: string;
     maxHit: string;
     maxHitDamage: number;
     maxHeal: string;
