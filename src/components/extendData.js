@@ -116,6 +116,10 @@ function parsePlayer(data) {
     healsPct: data['healed%'] || '',
     overHeal: Number.parseInt(data.overHeal),
     overHealPct: data.OverHealPct || '',
+    shield: Number.parseInt(data.damageShield),
+    shieldPct: `${Math.round(
+      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed)) * 100
+    )}%`,
 
     maxHit,
     maxHitDamage,
@@ -141,6 +145,7 @@ function parseEncounter(data) {
 
     damage: Number.parseInt(data.damage),
     healed: Number.parseInt(data.healed),
+    shield: Number.parseInt(data.damageShield),
   };
 }
 
@@ -167,6 +172,7 @@ function parseLimitBreak(data) {
 
     damage: Number.parseInt(data.damage),
     healed: Number.parseInt(data.healed),
+    shield: Number.parseInt(data.damageShield),
 
     maxHit,
     maxHeal,

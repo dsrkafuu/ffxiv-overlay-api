@@ -17,6 +17,7 @@ export interface EncounterData {
   hps: number;
   damage: number;
   healed: number;
+  shield: number;
 }
 
 export interface LimitBreakData {
@@ -25,6 +26,7 @@ export interface LimitBreakData {
   hps: number;
   damage: number;
   healed: number;
+  shield: number;
   maxHit: string;
   maxHeal: string;
 }
@@ -55,6 +57,8 @@ export interface CombatantData {
   healsPct: string;
   overHeal: number;
   overHealPct: string;
+  shield: number;
+  shieldPct: string;
   maxHit: string;
   maxHitDamage: number;
   maxHeal: string;
