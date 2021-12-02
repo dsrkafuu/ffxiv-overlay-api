@@ -118,7 +118,7 @@ function parsePlayer(data) {
     overHealPct: data.OverHealPct || '',
     shield: Number.parseInt(data.damageShield),
     shieldPct: `${Math.round(
-      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed)) * 100
+      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed) || 0) * 100
     )}%`,
 
     maxHit,
