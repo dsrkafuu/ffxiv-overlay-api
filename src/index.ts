@@ -6,3 +6,17 @@ window.OverlayAPI = OverlayAPI;
 
 export { OverlayAPI };
 export default OverlayAPI;
+
+export type {
+  OverlayOptions,
+  EncounterData,
+  LimitBreakData,
+  CombatantData,
+  ExtendData,
+  EventType,
+  EventMessage,
+  EventCallback,
+  HandlerType,
+  HandlerMessage,
+  JobType,
+} from './types';

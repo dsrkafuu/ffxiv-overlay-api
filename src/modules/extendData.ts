@@ -1,4 +1,11 @@
-type JobType = 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
+import {
+  JobType,
+  CombatantData,
+  EncounterData,
+  LimitBreakData,
+  EventMessage,
+  ExtendData,
+} from '../types';
 
 /**
  * parse job type

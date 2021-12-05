@@ -1,10 +1,10 @@
-declare interface OverlayOptions {
+export interface OverlayOptions {
   extendData?: boolean;
   silentMode?: boolean;
   seperateLB?: boolean;
 }
 
-declare interface EncounterData {
+export interface EncounterData {
   duration: string;
   durationSeconds: number;
   zoneName: string;
@@ -18,7 +18,7 @@ declare interface EncounterData {
   shield: number;
 }
 
-declare interface LimitBreakData {
+export interface LimitBreakData {
   name: 'Limit Break';
   dps: number;
   hps: number;
@@ -29,7 +29,7 @@ declare interface LimitBreakData {
   maxHeal: string;
 }
 
-declare interface CombatantData {
+export interface CombatantData {
   name: string;
   job: string;
   jobType: 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
@@ -63,14 +63,14 @@ declare interface CombatantData {
   maxHealDamage: number;
 }
 
-declare interface ExtendData {
+export interface ExtendData {
   isActive: boolean;
   encounter: EncounterData;
   limitBreak?: LimitBreakData;
   combatant: Array<CombatantData | LimitBreakData>;
 }
 
-declare type EventType =
+export type EventType =
   | 'CombatData'
   | 'LogLine'
   | 'ImportedLogLines'
@@ -80,14 +80,14 @@ declare type EventType =
   | 'PartyChanged'
   | 'BroadcastMessage';
 
-declare interface EventMessage {
+export interface EventMessage {
   type: EventType;
   [key: string]: any;
 }
 
-declare type EventCallback = (msg: EventMessage, ...args: any[]) => any;
+export type EventCallback = (msg: EventMessage, ...args: any[]) => any;
 
-declare type HandlerType =
+export type HandlerType =
   | 'subscribe'
   | 'getLanguage'
   | 'getCombatants'
@@ -96,7 +96,9 @@ declare type HandlerType =
   | 'say'
   | 'broadcast';
 
-declare interface HandlerMessage {
+export interface HandlerMessage {
   call: HandlerType;
   rseq?: number; // response promises for `callHandler`
 }
+
+export type JobType = 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';

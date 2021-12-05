@@ -2,7 +2,14 @@ import { logInfo, logError } from './utils/logger';
 import defaultOptions from './utils/options';
 import extendData from './modules/extendData';
 import mergeCombatant from './modules/mergeCombatant';
+import {
+  EventType,
+  EventMessage,
+  EventCallback,
+  OverlayOptions,
+} from './types';
 
+// messages callbacks send with `_sendMessage`
 type MessageCallback = (msg: any) => void;
 
 // messages send with `_sendMessage`
