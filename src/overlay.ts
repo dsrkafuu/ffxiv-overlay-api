@@ -1,31 +1,42 @@
-import { logInfo, logError } from './components/logger';
-import { defaultOptions } from './components/defaultOptions';
-import { extendData } from './components/extendData';
-import { mergeCombatant } from './components/mergeCombatant';
+import { logInfo, logError } from './utils/logger';
+import defaultOptions from './utils/options';
+import extendData from './modules/extendData';
+import mergeCombatant from './modules/mergeCombatant';
 
-export default class OverlayAPI {
+type MessageCallback = (msg: any) => void;
+
+// messages send with `_sendMessage`
+interface MessageObject {
+  msg: any;
+  cb?: MessageCallback;
+}
+
+// subscribers to some event of `EventType`
+interface EventSubscribers {
+  [event: string]: EventCallback[];
+}
+
+class OverlayAPI {
   // singleton
-  static _instance = null;
+  static _instance: OverlayAPI | null = null;
   // function for merging combatant like pets into first player arg
   static mergeCombatant = mergeCombatant;
 
   // settings
-  _options = {};
+  _options: OverlayOptions = {};
   // event subscribers
-  // { event:string : cb:function[] }
-  _subscribers = {};
+  _subscribers: EventSubscribers = {};
   // plugin init status
   _status = false;
   // waiting queue before api init
-  // { msg:object, cb?:function }[]
-  _queue = [];
+  _queue: MessageObject[] = [];
   _wsURL =
     Array.from(
       /[?&]OVERLAY_WS=([^&]+)/.exec(window.location.href) ||
         /[?&]HOST_PORT=([^&]+)/.exec(window.location.href) ||
         []
     )[1] || '';
-  _ws = null;
+  _ws: WebSocket | null = null;
   _resCounter = 0;
   _resPromises = {};
 
@@ -43,11 +54,13 @@ export default class OverlayAPI {
     // check mode
     if (this._wsURL) {
       // if in websocket mode
-      !this._options.silentMode && logInfo('initializing api in websocket mode...');
+      !this._options.silentMode &&
+        logInfo('initializing api in websocket mode...');
       this._initWebSocketMode();
     } else {
       // normal mode
-      !this._options.silentMode && logInfo('initializing api in callback mode...');
+      !this._options.silentMode &&
+        logInfo('initializing api in callback mode...');
       this._initCallbackMode();
     }
     // `common.js` _L92 binding
@@ -62,7 +75,7 @@ export default class OverlayAPI {
   /**
    * send message to OverlayPluginApi or push into queue before its init
    */
-  _sendMessage(msg, cb) {
+  _sendMessage(msg: any, cb?: MessageCallback) {
     if (this._ws) {
       // websocket mode
       if (this._status) {
@@ -93,13 +106,13 @@ export default class OverlayAPI {
   /**
    * trigger event function, called by OverlayPluginApi, need `this` binding
    */
-  _triggerEvents(msg) {
+  _triggerEvents(msg: EventMessage) {
     // if this event type has subscribers
     if (this._subscribers[msg.type]) {
       // trigger all this event's callback
-      for (let cb of this._subscribers[msg.type]) {
+      for (const cb of this._subscribers[msg.type]) {
         if (this._options.extendData) {
-          cb(extendData(msg, this._options.seperateLB));
+          cb(extendData(msg, !!this._options.seperateLB));
         } else {
           cb(msg);
         }
@@ -127,25 +140,21 @@ export default class OverlayAPI {
       this._status = true;
       // send all messages in queue to OverlayPlugin
       while (this._queue.length > 0) {
-        const { msg } = this._queue.shift();
+        const { msg } = this._queue.shift() as MessageObject;
         this._sendMessage(msg);
       }
       !this._options.silentMode && logInfo('api ready');
     });
     // on message loaded from WebSocket
     this._ws.addEventListener('message', (msg) => {
+      let data: EventMessage;
       try {
-        msg = JSON.parse(msg.data);
+        data = JSON.parse(msg.data) as EventMessage;
       } catch (e) {
         logError(e, msg);
         return;
       }
-      if (msg.rseq !== undefined && this._resPromises[msg.rseq]) {
-        this._resPromises[msg.rseq](msg);
-        delete this._resPromises[msg.rseq];
-      } else {
-        this._triggerEvents(msg);
-      }
+      this._triggerEvents(data);
     });
     // connection failed
     this._ws.addEventListener('close', () => {
@@ -163,7 +172,8 @@ export default class OverlayAPI {
    */
   _initCallbackMode() {
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
-      !this._options.silentMode && logInfo('api not ready, trying to reconnect...');
+      !this._options.silentMode &&
+        logInfo('api not ready, trying to reconnect...');
       setTimeout(() => {
         this._initCallbackMode();
       }, 5000);
@@ -176,7 +186,7 @@ export default class OverlayAPI {
     window.__OverlayCallback = this._triggerEvents.bind(this);
     // send all messages in queue to OverlayPlugin
     while (this._queue.length > 0) {
-      const { msg, cb } = this._queue.shift();
+      const { msg, cb } = this._queue.shift() as MessageObject;
       this._sendMessage(msg, cb);
     }
     !this._options.silentMode && logInfo('api ready');
@@ -185,7 +195,7 @@ export default class OverlayAPI {
   /**
    * add an event listener
    */
-  addListener(event, cb) {
+  addListener(event: EventType, cb: EventCallback) {
     // init event array
     if (!this._subscribers[event]) {
       this._subscribers[event] = [];
@@ -193,7 +203,8 @@ export default class OverlayAPI {
     // push events
     if (typeof cb === 'function') {
       this._subscribers[event].push(cb);
-      !this._options.silentMode && logInfo('listener', cb, 'of event', event, 'added');
+      !this._options.silentMode &&
+        logInfo('listener', cb, 'of event', event, 'added');
     } else {
       logError('wrong params', cb);
     }
@@ -202,13 +213,14 @@ export default class OverlayAPI {
   /**
    * remove a listener
    */
-  removeListener(event, cb) {
+  removeListener(event: EventType, cb: EventCallback) {
     if (this._subscribers[event]) {
       if (typeof cb === 'function') {
-        let cbPos = this._subscribers[event].indexOf(cb);
+        const cbPos = this._subscribers[event].indexOf(cb);
         if (cbPos > -1) {
           this._subscribers[event].splice(cbPos, 1);
-          !this._options.silentMode && logInfo('listener', cb, 'of event', event, 'removed');
+          !this._options.silentMode &&
+            logInfo('listener', cb, 'of event', event, 'removed');
         }
       } else {
         logError('wrong params', cb);
@@ -219,17 +231,18 @@ export default class OverlayAPI {
   /**
    * remove all listener of one event type
    */
-  removeAllListener(event) {
+  removeAllListener(event: EventType) {
     if (this._subscribers[event] && this._subscribers[event].length > 0) {
       this._subscribers[event] = [];
-      !this._options.silentMode && logInfo('all listener of event', event, 'removed');
+      !this._options.silentMode &&
+        logInfo('all listener of event', event, 'removed');
     }
   }
 
   /**
    * get all listeners of a event
    */
-  getAllListener(event) {
+  getAllListener(event: EventType) {
     return this._subscribers[event] ? this._subscribers[event] : [];
   }
 
@@ -241,7 +254,8 @@ export default class OverlayAPI {
       call: 'subscribe',
       events: Object.keys(this._subscribers),
     });
-    !this._options.silentMode && logInfo('events', Object.keys(this._subscribers), 'started');
+    !this._options.silentMode &&
+      logInfo('events', Object.keys(this._subscribers), 'started');
   }
 
   /**
@@ -250,8 +264,6 @@ export default class OverlayAPI {
   endEncounter() {
     if (this._status) {
       return window.OverlayPluginApi.endEncounter();
-    } else {
-      logError('plugin not ready yet');
     }
     !this._options.silentMode && logInfo('encounter ended');
   }
@@ -261,13 +273,9 @@ export default class OverlayAPI {
    * these handlers are declared by Event Sources,
    * either built into OverlayPlugin or loaded through addons like Cactbot
    */
-  callHandler(msg) {
+  callHandler(msg: any) {
     let p;
     if (this._ws) {
-      msg.rseq = this._resCounter++;
-      p = new Promise((resolve) => {
-        this._resPromises[msg.rseq] = resolve;
-      });
       this._sendMessage(msg);
     } else {
       p = new Promise((resolve, reject) => {
@@ -289,7 +297,9 @@ export default class OverlayAPI {
   /**
    * simulate triggering event once
    */
-  simulateData(msg) {
+  simulateData(msg: EventMessage) {
     this._triggerEvents(msg);
   }
 }
+
+export default OverlayAPI;

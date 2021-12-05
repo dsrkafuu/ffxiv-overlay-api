@@ -1,7 +1,9 @@
+type JobType = 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
+
 /**
  * parse job type
  */
-function parseJob(jobName) {
+function parseJob(jobName: string): JobType {
   jobName = jobName.toLowerCase();
 
   const dps = [
@@ -70,7 +72,7 @@ function parseJob(jobName) {
 /**
  * parse single player
  */
-function parsePlayer(data) {
+function parsePlayer(data: any): CombatantData {
   let [maxHit, maxHitDamage] = ['', 0];
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
@@ -118,7 +120,8 @@ function parsePlayer(data) {
     overHealPct: data.OverHealPct || '',
     shield: Number.parseInt(data.damageShield),
     shieldPct: `${Math.round(
-      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed) || 0) * 100
+      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed) || 0) *
+        100
     )}%`,
 
     maxHit,
@@ -131,7 +134,7 @@ function parsePlayer(data) {
 /**
  * parse encounter data
  */
-function parseEncounter(data) {
+function parseEncounter(data: any): EncounterData {
   return {
     duration: data.duration || '',
     durationSeconds: Number.parseInt(data.DURATION),
@@ -152,7 +155,7 @@ function parseEncounter(data) {
 /**
  * parse LB data
  */
-function parseLimitBreak(data) {
+function parseLimitBreak(data: any): LimitBreakData {
   let maxHit = '';
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
@@ -182,10 +185,10 @@ function parseLimitBreak(data) {
 /**
  * inject extended data
  */
-export function extendData(data, seperateLB) {
+function extendData(data: EventMessage, seperateLB: boolean): EventMessage {
   if (data.type === 'CombatData') {
     // common data
-    const parsedData = {
+    const parsedData: ExtendData = {
       isActive: data.isActive === 'true' || data.isActive === true,
       encounter: parseEncounter(data.Encounter),
       combatant: [],
@@ -200,7 +203,9 @@ export function extendData(data, seperateLB) {
       if (key === 'Limit Break') {
         const cbt = parseLimitBreak(data.Combatant[key]);
         if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
-          seperateLB ? (parsedData.limitBreak = cbt) : parsedData.combatant.push(cbt);
+          seperateLB
+            ? (parsedData.limitBreak = cbt)
+            : parsedData.combatant.push(cbt);
         }
       } else {
         const cbt = parsePlayer(data.Combatant[key]);
@@ -214,3 +219,5 @@ export function extendData(data, seperateLB) {
   }
   return data;
 }
+
+export default extendData;
