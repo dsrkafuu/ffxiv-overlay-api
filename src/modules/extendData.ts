@@ -6,6 +6,9 @@ import {
   EventMessage,
   ExtendData,
 } from '../types';
+import { getPctNum } from '../utils/getter';
+
+const toInt = Number.parseInt || window.parseInt || Math.floor;
 
 /**
  * parse job type
@@ -84,13 +87,13 @@ function parsePlayer(data: any): CombatantData {
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
     maxHit = maxHitData[0];
-    maxHitDamage = Number.parseInt(maxHitData[1]);
+    maxHitDamage = toInt(maxHitData[1]);
   }
   let [maxHeal, maxHealDamage] = ['', 0];
   const maxHealData = data.maxheal.split('-');
   if (maxHealData.length > 1) {
     maxHeal = maxHealData[0];
-    maxHealDamage = Number.parseInt(maxHealData[1]);
+    maxHealDamage = toInt(maxHealData[1]);
   }
 
   return {
@@ -99,37 +102,39 @@ function parsePlayer(data: any): CombatantData {
     job: data.Job.toLowerCase(),
     jobType: parseJob(data.Job),
 
-    dps: Number.parseInt(data.encdps),
-    last10DPS: Number.parseInt(data.Last10DPS),
-    last30DPS: Number.parseInt(data.Last30DPS),
-    last60DPS: Number.parseInt(data.Last60DPS),
-    hps: Number.parseInt(data.enchps),
+    dps: toInt(data.encdps),
+    last10DPS: toInt(data.Last10DPS),
+    last30DPS: toInt(data.Last30DPS),
+    last60DPS: toInt(data.Last60DPS),
+    hps: toInt(data.enchps),
 
-    swings: Number.parseInt(data.swings),
-    hits: Number.parseInt(data.hits),
-    deaths: Number.parseInt(data.deaths),
+    swings: toInt(data.swings),
+    hits: toInt(data.hits),
+    deaths: toInt(data.deaths),
 
-    directHits: Number.parseInt(data.DirectHitCount),
+    directHits: toInt(data.DirectHitCount),
     directHitPct: data.DirectHitPct || '',
-    critHits: Number.parseInt(data.crithits),
+    critHits: toInt(data.crithits),
     critHitPct: data['crithit%'] || '',
-    directCritHits: Number.parseInt(data.CritDirectHitCount),
+    directCritHits: toInt(data.CritDirectHitCount),
     directCritHitPct: data.CritDirectHitPct || '',
 
-    damage: Number.parseInt(data.damage),
-    damageTaken: Number.parseInt(data.damagetaken),
+    damage: toInt(data.damage),
+    damageTaken: toInt(data.damagetaken),
     damagePct: data['damage%'] || '',
 
-    healed: Number.parseInt(data.healed),
-    healsTaken: Number.parseInt(data.healstaken),
-    healsPct: data['healed%'] || '',
-    overHeal: Number.parseInt(data.overHeal),
+    healed: toInt(data.healed),
+    healsTaken: toInt(data.healstaken),
+    healsPct: data['healed%'] || '', // this includes shield pct
+    overHeal: toInt(data.overHeal),
     overHealPct: data.OverHealPct || '',
-    shield: Number.parseInt(data.damageShield),
-    shieldPct: `${Math.round(
-      (Number.parseInt(data.damageShield) / Number.parseInt(data.healed) || 0) *
-        100
-    )}%`,
+    shield: toInt(data.damageShield),
+    shieldPct: `${
+      Math.round(
+        (toInt(data.damageShield) / toInt(data.healed) || 0) *
+          getPctNum(data['healed%'] || '')
+      ) || 0
+    }%`,
 
     maxHit,
     maxHitDamage,
@@ -144,18 +149,18 @@ function parsePlayer(data: any): CombatantData {
 function parseEncounter(data: any): EncounterData {
   return {
     duration: data.duration || '',
-    durationSeconds: Number.parseInt(data.DURATION),
+    durationSeconds: toInt(data.DURATION),
     zoneName: data.CurrentZoneName || '',
 
-    dps: Number.parseInt(data.encdps),
-    last10DPS: Number.parseInt(data.Last10DPS),
-    last30DPS: Number.parseInt(data.Last30DPS),
-    last60DPS: Number.parseInt(data.Last60DPS),
-    hps: Number.parseInt(data.enchps),
+    dps: toInt(data.encdps),
+    last10DPS: toInt(data.Last10DPS),
+    last30DPS: toInt(data.Last30DPS),
+    last60DPS: toInt(data.Last60DPS),
+    hps: toInt(data.enchps),
 
-    damage: Number.parseInt(data.damage),
-    healed: Number.parseInt(data.healed),
-    shield: Number.parseInt(data.damageShield),
+    damage: toInt(data.damage),
+    healed: toInt(data.healed),
+    shield: toInt(data.damageShield),
   };
 }
 
@@ -177,12 +182,12 @@ function parseLimitBreak(data: any): LimitBreakData {
   return {
     name: 'Limit Break',
 
-    dps: Number.parseInt(data.encdps),
-    hps: Number.parseInt(data.enchps),
+    dps: toInt(data.encdps),
+    hps: toInt(data.enchps),
 
-    damage: Number.parseInt(data.damage),
-    healed: Number.parseInt(data.healed),
-    shield: Number.parseInt(data.damageShield),
+    damage: toInt(data.damage),
+    healed: toInt(data.healed),
+    shield: toInt(data.damageShield),
 
     maxHit,
     maxHeal,

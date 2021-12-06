@@ -1,3 +1,5 @@
+import { getPctNum } from './getter';
+
 export function addNumber(...args: number[]) {
   if (!args.length) {
     return 0;
@@ -18,10 +20,8 @@ export function addPct(...args: string[]) {
   }
   let sum = 0;
   for (let i = 0; i < args.length; i++) {
-    const exp = /([0-9]+)%/gi.exec(args[i]);
-    if (exp && exp[1]) {
-      sum += Number.parseInt(exp[1]) || 0;
-    }
+    const num = getPctNum(args[i]);
+    sum += num;
   }
   return `${sum}%`;
 }
@@ -59,13 +59,10 @@ export function addOverHealPct(...args: string[]) {
   let tsum = 0;
   let tnum = 0;
   for (let i = 0; i < args.length; i++) {
-    const exp = /([0-9]+)%/gi.exec(args[i]);
-    if (exp && exp[1]) {
-      const num = Number.parseInt(exp[1]) || 0;
-      if (num > 0) {
-        tsum += num;
-        tnum++;
-      }
+    const num = getPctNum(args[i]);
+    if (num > 0) {
+      tsum += num;
+      tnum++;
     }
   }
   if (tnum === 0) {
