@@ -3,7 +3,7 @@ import {
   CombatantData,
   EncounterData,
   LimitBreakData,
-  EventMessage,
+  EventData,
   ExtendData,
 } from '../types';
 import { getPctNum } from '../utils/getter';
@@ -197,7 +197,7 @@ function parseLimitBreak(data: any): LimitBreakData {
 /**
  * inject extended data
  */
-function extendData(data: EventMessage, seperateLB: boolean): EventMessage {
+function injectExtendData(data: EventData): EventData {
   if (data.type === 'CombatData') {
     // common data
     const parsedData: ExtendData = {
@@ -213,17 +213,9 @@ function extendData(data: EventMessage, seperateLB: boolean): EventMessage {
     );
     combatantValidKeys.forEach((key) => {
       if (key === 'Limit Break') {
-        const cbt = parseLimitBreak(data.Combatant[key]);
-        if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
-          seperateLB
-            ? (parsedData.limitBreak = cbt)
-            : parsedData.combatant.push(cbt);
-        }
+        parsedData.limitBreak = parseLimitBreak(data.Combatant[key]);
       } else {
-        const cbt = parsePlayer(data.Combatant[key]);
-        if (!Number.isNaN(cbt.dps) && !Number.isNaN(cbt.hps)) {
-          parsedData.combatant.push(cbt);
-        }
+        parsedData.combatant.push(parsePlayer(data.Combatant[key]));
       }
     });
 
@@ -232,4 +224,4 @@ function extendData(data: EventMessage, seperateLB: boolean): EventMessage {
   return data;
 }
 
-export default extendData;
+export default injectExtendData;

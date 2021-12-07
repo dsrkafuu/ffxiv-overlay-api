@@ -1,7 +1,7 @@
 {
   "name": "ffxiv-overlay-api",
-  "version": "4.1.0-beta.6",
-  "description": "Build your own modern FFXIV overlay with npm.",
+  "version": "4.1.0-beta.7",
+  "description": "Build your own modern FFXIV overlay with npm & TypeScript support.",
   "keywords": [
     "ffxiv",
     "act",
@@ -30,7 +30,7 @@
     "eslint": "eslint --ext \".js,.ts\" \"./src\"",
     "prettier": "prettier --write .",
     "typecheck": "tsc",
-    "compile:esm": "esbuild \"./src/index.ts\" --bundle --outfile=\"./lib/index.js\" --format=esm --sourcemap --target=esnext",
+    "compile:esm": "esbuild \"./src/index.ts\" --bundle --outfile=\"./lib/index.js\" --format=esm --sourcemap --target=es6",
     "compile:iife": "esbuild \"./src/index.ts\" --bundle --outfile=\"./lib/overlay.min.js\" --format=iife --sourcemap --minify --target=es6",
     "compile": "run-p compile:esm compile:iife",
     "dev:build": "esbuild \"./src/index.ts\" --bundle --outfile=\"./lib/overlay.min.js\" --format=iife --sourcemap --target=es6 --watch",

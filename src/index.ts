@@ -8,15 +8,12 @@ export { OverlayAPI };
 export default OverlayAPI;
 
 export type {
-  OverlayOptions,
+  JobType,
   EncounterData,
   LimitBreakData,
   CombatantData,
   ExtendData,
   EventType,
-  EventMessage,
+  EventData,
   EventCallback,
-  HandlerType,
-  HandlerMessage,
-  JobType,
 } from './types';

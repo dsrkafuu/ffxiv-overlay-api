@@ -5,7 +5,7 @@
 ![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api)
 ![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api)
 
-Build your own modern FFXIV overlay with npm.
+Build your own modern FFXIV overlay with npm & TypeScript support.
 
 This library needs to be used along with [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin).
 
@@ -32,10 +32,7 @@ Or import the library from jsDelivr CDN:
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4/lib/overlay.min.js"></script>
 <script>
-  const overlay = new OverlayAPI({
-    extendData: true,
-    silentMode: false,
-  });
+  const overlay = new window.OverlayAPI();
 </script>
 ```
 
@@ -48,21 +45,9 @@ import OverlayAPI from 'ffxiv-overlay-api';
 const overlay = new OverlayAPI();
 ```
 
-Note that this library only works in browser.
-
-You can also pass options to constructor (default option below):
-
-```js
-const overlay = new OverlayAPI({
-  extendData: true,
-  silentMode: false,
-});
-```
-
 Then you can add bunch of different listeners.
 
 ```js
-const overlay = new OverlayAPI();
 overlay.addListener('CombatData', (data) => {
   console.log('listener of `CombatData`', data);
 });
@@ -83,73 +68,63 @@ After that, put the URL of your overlay into OverlayPlugin, or use the WebSocket
 
 Checkout [Development](#development) section for more details and my new overlay [Skyline Overlay](https://github.com/dsrkafuu/skyline-overlay) for example.
 
-## Options
-
-| Option       | Default | Description                                             |
-| ------------ | ------- | ------------------------------------------------------- |
-| `extendData` | `true`  | Parse and add cleaner data to listeners of `CombatData` |
-| `silentMode` | `false` | For production use, do not log all API stats info       |
-| `seperateLB` | `false` | Separate Limit Break data from Combatant data           |
-
 ## API
 
 You can find all events available in <https://ngld.github.io/OverlayPlugin/devs/event_types>.
 
-### `new OverlayAPI().addListener(event, cb)`
+### `addListener`
+
+`addListener(event: EventType, cb: EventCallback): void;`
 
 add an event listener
 
-- `@param {EventType} event` event to listen
-- `@param {Function} cb` callback function
+### `removeListener`
 
-### `new OverlayAPI().removeListener(event, cb)`
+`removeListener(event: EventType, cb: EventCallback): void;`
 
 remove a listener
 
-- `@param {EventType} event` event type which listener belongs to
-- `@param {Function} cb` function which listener to remove
+### `removeAllListener`
 
-### `new OverlayAPI().removeAllListener(event)`
+`removeAllListener(event: EventType): void;`
 
 remove all listener of one event type
 
-- `@param {EventType} event` event type which listener belongs to
+### `getAllListener`
 
-### `new OverlayAPI().getAllListener(event)`
+`getAllListener(event: EventType): EventCallback[];`
 
 get all listeners of a event
 
-- `@param {EventType} event` event type which listener belongs to
-- `@return {Array<Function>}`
+### `startEvent`
 
-### `new OverlayAPI().startEvent()`
+`startEvent(): void;`
 
 start listening event
 
-### `new OverlayAPI().endEncounter()`
+### `endEncounter`
+
+`endEncounter(): Promise<void>;`
 
 ends current encounter and save it
 
-- `@return {Promise<any>}`
+### `callHandler`
 
-### `new OverlayAPI().callHandler(msg)`
+`callHandler(msg: any): Promise<any>;`
 
-this function allows you to call an overlay handler, these handlers are declared by Event Sources, either built into OverlayPlugin or loaded through addons like Cactbot
+This function allows you to call an overlay handler, these handlers are declared by Event Sources, either built into OverlayPlugin or loaded through addons like Cactbot.
 
-- `@param {HandlerMessage} msg` message send to OverlayPlugin
-- `@return {Promise<EventMessage>}`
+### `simulateData`
 
-### `new OverlayAPI().simulateData(msg)`
+`simulateData(data: EventData): void;`
 
 simulate triggering event once
 
-- `@param {EventMessage} msg` data same as those from OverlayPluginApi like in <https://github.com/dsrkafuu/ffxiv-overlay-api/tree/master/test>
+### `OverlayAPI.mergeCombatant`
 
-### `OverlayAPI.mergeCombatant(...args)`
+`mergeCombatant(...args: CombatantData[]): CombatantData | null;`
 
 static function for merging combatant like pets into first player arg
-
-- `@param {...CombatantData} args`
 
 ## Development
 

@@ -119,7 +119,7 @@ Please register your listeners before calling startOverlayEvents().`);
 
     if (ws) {
       msg.rseq = rseqCounter++;
-      p = new Promise((resolve, reject) => {
+      p = new Promise((resolve) => {
         responsePromises[msg.rseq] = resolve;
       });
 

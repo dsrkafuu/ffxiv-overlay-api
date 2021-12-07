@@ -1,8 +1,4 @@
-export interface OverlayOptions {
-  extendData?: boolean;
-  silentMode?: boolean;
-  seperateLB?: boolean;
-}
+export type JobType = 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
 
 export interface EncounterData {
   duration: string;
@@ -32,7 +28,7 @@ export interface LimitBreakData {
 export interface CombatantData {
   name: string;
   job: string;
-  jobType: 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
+  jobType: JobType;
   dps: number;
   last10DPS: number;
   last30DPS: number;
@@ -66,8 +62,8 @@ export interface CombatantData {
 export interface ExtendData {
   isActive: boolean;
   encounter: EncounterData;
+  combatant: CombatantData[];
   limitBreak?: LimitBreakData;
-  combatant: Array<CombatantData | LimitBreakData>;
 }
 
 export type EventType =
@@ -80,25 +76,12 @@ export type EventType =
   | 'PartyChanged'
   | 'BroadcastMessage';
 
-export interface EventMessage {
+// https://ngld.github.io/OverlayPlugin/devs/event_types
+export interface EventData {
   type: EventType;
+  extendData?: ExtendData; // data extended by this api (only for `CombatData` type)
+  rseq?: number; // request sequence number (`common.js` L44 used)
   [key: string]: any;
 }
 
-export type EventCallback = (msg: EventMessage, ...args: any[]) => any;
-
-export type HandlerType =
-  | 'subscribe'
-  | 'getLanguage'
-  | 'getCombatants'
-  | 'saveData'
-  | 'loadData'
-  | 'say'
-  | 'broadcast';
-
-export interface HandlerMessage {
-  call: HandlerType;
-  rseq?: number; // response promises for `callHandler`
-}
-
-export type JobType = 'dps' | 'healer' | 'tank' | 'hand' | 'land' | 'unknown';
+export type EventCallback = (data: EventData) => any;
