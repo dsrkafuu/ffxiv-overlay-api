@@ -82,8 +82,10 @@ class OverlayAPI {
 
     // check mode
     if (this._wsURL) {
+      logInfo('initializing api in websocket mode...');
       this._initWS();
     } else {
+      logInfo('initializing api in callback mode...');
       this._initCB();
     }
     // `common.js` _L97 binding
@@ -144,7 +146,6 @@ class OverlayAPI {
    * init api in websocket mode
    */
   private _initWS() {
-    logInfo('initializing api in websocket mode...');
     // legacy ws url support
     let url = this._wsURL;
     if (!url.includes('/ws')) {
@@ -188,7 +189,6 @@ class OverlayAPI {
    * init api in callback mode
    */
   private _initCB() {
-    logInfo('initializing api in callback mode...');
     // if CEF environment not ready
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
       setTimeout(() => {
