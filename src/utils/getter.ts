@@ -1,6 +1,6 @@
 export function getInt(input: string | number) {
   const toInt = Number.parseInt || window.parseInt;
-  return toInt(`${input}`);
+  return toInt(`${input}`) || 0;
 }
 
 /**

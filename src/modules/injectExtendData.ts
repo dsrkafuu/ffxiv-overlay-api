@@ -11,7 +11,7 @@ import { getPctNum, getInt } from '../utils/getter';
 /**
  * parse job type
  */
-function parseJob(jobName: string): JobType {
+function parseJob(jobName: string): { name: string; type: JobType } {
   jobName = jobName.toLowerCase();
 
   const dps = [
@@ -63,17 +63,17 @@ function parseJob(jobName: string): JobType {
   const land = ['bot', 'fsh', 'min'];
 
   if (dps.includes(jobName)) {
-    return 'dps';
+    return { name: jobName, type: 'dps' };
   } else if (healer.includes(jobName)) {
-    return 'healer';
+    return { name: jobName, type: 'healer' };
   } else if (tank.includes(jobName)) {
-    return 'tank';
+    return { name: jobName, type: 'tank' };
   } else if (hand.includes(jobName)) {
-    return 'hand';
+    return { name: jobName, type: 'hand' };
   } else if (land.includes(jobName)) {
-    return 'land';
+    return { name: jobName, type: 'land' };
   } else {
-    return 'unknown';
+    return { name: jobName || 'unknown', type: 'unknown' };
   }
 }
 
@@ -82,23 +82,25 @@ function parseJob(jobName: string): JobType {
  */
 function parsePlayer(data: any): CombatantData {
   let [maxHit, maxHitDamage] = ['', 0];
-  const maxHitData = data.maxhit.split('-');
+  const maxHitData = (data.maxhit || '').split('-');
   if (maxHitData.length > 1) {
     maxHit = maxHitData[0];
     maxHitDamage = getInt(maxHitData[1]);
   }
   let [maxHeal, maxHealDamage] = ['', 0];
-  const maxHealData = data.maxheal.split('-');
+  const maxHealData = (data.maxheal || '').split('-');
   if (maxHealData.length > 1) {
     maxHeal = maxHealData[0];
     maxHealDamage = getInt(maxHealData[1]);
   }
 
+  const jobParsed = parseJob(data.Job || '');
+
   return {
     name: data.name,
 
-    job: data.Job.toLowerCase(),
-    jobType: parseJob(data.Job),
+    job: jobParsed.name,
+    jobType: jobParsed.type,
 
     dps: getInt(data.encdps),
     last10DPS: getInt(data.Last10DPS),
@@ -167,12 +169,12 @@ function parseEncounter(data: any): EncounterData {
  */
 function parseLimitBreak(data: any): LimitBreakData {
   let maxHit = '';
-  const maxHitData = data.maxhit.split('-');
+  const maxHitData = (data.maxhit || '').split('-');
   if (maxHitData.length > 1) {
     maxHit = maxHitData[0];
   }
   let maxHeal = '';
-  const maxHealData = data.maxheal.split('-');
+  const maxHealData = (data.maxheal || '').split('-');
   if (maxHealData.length > 1) {
     maxHeal = maxHealData[0];
   }
