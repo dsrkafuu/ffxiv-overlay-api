@@ -1,5 +1,6 @@
 import { logInfo, logError, logWarn } from './utils/logger';
 import injectExtendData from './modules/injectExtendData';
+import isCEFSharp from './modules/isCEFSharp';
 import mergeCombatant from './modules/mergeCombatant';
 import { EventType, EventData, EventCallback } from './types';
 
@@ -38,6 +39,8 @@ class OverlayAPI {
   static _instance: OverlayAPI | null = null;
   // function for merging combatant like pets into first player arg
   static mergeCombatant = mergeCombatant;
+  // check if in overlay plugin emblemed cef
+  static isCEFSharp = isCEFSharp;
 
   // plugin init status
   private _status = false;

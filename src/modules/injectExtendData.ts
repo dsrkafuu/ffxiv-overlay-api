@@ -6,9 +6,7 @@ import {
   EventData,
   ExtendData,
 } from '../types';
-import { getPctNum } from '../utils/getter';
-
-const toInt = Number.parseInt || window.parseInt || Math.floor;
+import { getPctNum, getInt } from '../utils/getter';
 
 /**
  * parse job type
@@ -87,13 +85,13 @@ function parsePlayer(data: any): CombatantData {
   const maxHitData = data.maxhit.split('-');
   if (maxHitData.length > 1) {
     maxHit = maxHitData[0];
-    maxHitDamage = toInt(maxHitData[1]);
+    maxHitDamage = getInt(maxHitData[1]);
   }
   let [maxHeal, maxHealDamage] = ['', 0];
   const maxHealData = data.maxheal.split('-');
   if (maxHealData.length > 1) {
     maxHeal = maxHealData[0];
-    maxHealDamage = toInt(maxHealData[1]);
+    maxHealDamage = getInt(maxHealData[1]);
   }
 
   return {
@@ -102,36 +100,36 @@ function parsePlayer(data: any): CombatantData {
     job: data.Job.toLowerCase(),
     jobType: parseJob(data.Job),
 
-    dps: toInt(data.encdps),
-    last10DPS: toInt(data.Last10DPS),
-    last30DPS: toInt(data.Last30DPS),
-    last60DPS: toInt(data.Last60DPS),
-    hps: toInt(data.enchps),
+    dps: getInt(data.encdps),
+    last10DPS: getInt(data.Last10DPS),
+    last30DPS: getInt(data.Last30DPS),
+    last60DPS: getInt(data.Last60DPS),
+    hps: getInt(data.enchps),
 
-    swings: toInt(data.swings),
-    hits: toInt(data.hits),
-    deaths: toInt(data.deaths),
+    swings: getInt(data.swings),
+    hits: getInt(data.hits),
+    deaths: getInt(data.deaths),
 
-    directHits: toInt(data.DirectHitCount),
+    directHits: getInt(data.DirectHitCount),
     directHitPct: data.DirectHitPct || '',
-    critHits: toInt(data.crithits),
+    critHits: getInt(data.crithits),
     critHitPct: data['crithit%'] || '',
-    directCritHits: toInt(data.CritDirectHitCount),
+    directCritHits: getInt(data.CritDirectHitCount),
     directCritHitPct: data.CritDirectHitPct || '',
 
-    damage: toInt(data.damage),
-    damageTaken: toInt(data.damagetaken),
+    damage: getInt(data.damage),
+    damageTaken: getInt(data.damagetaken),
     damagePct: data['damage%'] || '',
 
-    healed: toInt(data.healed),
-    healsTaken: toInt(data.healstaken),
+    healed: getInt(data.healed),
+    healsTaken: getInt(data.healstaken),
     healsPct: data['healed%'] || '', // this includes shield pct
-    overHeal: toInt(data.overHeal),
+    overHeal: getInt(data.overHeal),
     overHealPct: data.OverHealPct || '',
-    shield: toInt(data.damageShield),
+    shield: getInt(data.damageShield),
     shieldPct: `${
       Math.round(
-        (toInt(data.damageShield) / toInt(data.healed) || 0) *
+        (getInt(data.damageShield) / getInt(data.healed) || 0) *
           getPctNum(data['healed%'] || '')
       ) || 0
     }%`,
@@ -149,18 +147,18 @@ function parsePlayer(data: any): CombatantData {
 function parseEncounter(data: any): EncounterData {
   return {
     duration: data.duration || '',
-    durationSeconds: toInt(data.DURATION),
+    durationSeconds: getInt(data.DURATION),
     zoneName: data.CurrentZoneName || '',
 
-    dps: toInt(data.encdps),
-    last10DPS: toInt(data.Last10DPS),
-    last30DPS: toInt(data.Last30DPS),
-    last60DPS: toInt(data.Last60DPS),
-    hps: toInt(data.enchps),
+    dps: getInt(data.encdps),
+    last10DPS: getInt(data.Last10DPS),
+    last30DPS: getInt(data.Last30DPS),
+    last60DPS: getInt(data.Last60DPS),
+    hps: getInt(data.enchps),
 
-    damage: toInt(data.damage),
-    healed: toInt(data.healed),
-    shield: toInt(data.damageShield),
+    damage: getInt(data.damage),
+    healed: getInt(data.healed),
+    shield: getInt(data.damageShield),
   };
 }
 
@@ -182,12 +180,12 @@ function parseLimitBreak(data: any): LimitBreakData {
   return {
     name: 'Limit Break',
 
-    dps: toInt(data.encdps),
-    hps: toInt(data.enchps),
+    dps: getInt(data.encdps),
+    hps: getInt(data.enchps),
 
-    damage: toInt(data.damage),
-    healed: toInt(data.healed),
-    shield: toInt(data.damageShield),
+    damage: getInt(data.damage),
+    healed: getInt(data.healed),
+    shield: getInt(data.damageShield),
 
     maxHit,
     maxHeal,

@@ -126,6 +126,12 @@ simulate triggering event once
 
 static function for merging combatant like pets into first player arg
 
+### `OverlayAPI.isCEFSharp`
+
+`isCEFSharp(): boolean;`
+
+check if in overlay plugin emblemed cef
+
 ## Development
 
 Clone this repo, then:
