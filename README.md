@@ -42,7 +42,14 @@ After installation, you can import the library:
 
 ```js
 import OverlayAPI from 'ffxiv-overlay-api';
+import { OverlayAPI } from 'ffxiv-overlay-api'; // also works
 const overlay = new OverlayAPI();
+
+// use static tool functions directly
+OverlayAPI.isCEFSharp();
+// import tool functions
+import { isCEFSharp } from 'ffxiv-overlay-api';
+isCEFSharp();
 ```
 
 Then you can add bunch of different listeners.

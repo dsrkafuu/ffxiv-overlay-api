@@ -3,9 +3,11 @@
 import OverlayAPI from './overlay';
 
 window.OverlayAPI = OverlayAPI;
-
 export { OverlayAPI };
 export default OverlayAPI;
+
+export { default as mergeCombatant } from './modules/mergeCombatant';
+export { default as isCEFSharp } from './modules/isCEFSharp';
 
 export type {
   JobType,
