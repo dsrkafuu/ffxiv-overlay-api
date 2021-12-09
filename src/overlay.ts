@@ -275,10 +275,10 @@ class OverlayAPI {
   }
 
   /**
-   * ends current encounter and save it
+   * ends current encounter and save it, not working in websocket mode
    */
   async endEncounter() {
-    if (this._status) {
+    if (this._status && isCEFSharp()) {
       await window.OverlayPluginApi.endEncounter();
       logInfo('encounter ended');
     }

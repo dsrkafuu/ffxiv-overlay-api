@@ -113,7 +113,7 @@ start listening event
 
 `endEncounter(): Promise<void>;`
 
-ends current encounter and save it
+ends current encounter and save it, not working in websocket mode
 
 ### `callHandler`
 
