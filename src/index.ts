@@ -1,5 +1,8 @@
 /*! ffxiv-overlay-plugin | DSRKafuU (https://dsrkafuu.net) | Copyright (c) MIT License */
 
+/* source `common.js` 4a00a65 */
+/* https://github.com/ngld/OverlayPlugin/commits/master/docs/assets/shared/common.js */
+
 import OverlayAPI from './overlay';
 
 window.OverlayAPI = OverlayAPI;
