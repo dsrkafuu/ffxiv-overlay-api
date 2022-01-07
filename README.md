@@ -1,9 +1,10 @@
 # 🗡 ffxiv-overlay-api 🛡
 
-![BADGE](https://img.shields.io/github/workflow/status/dsrkafuu/ffxiv-overlay-api/npm-publish)
-![BADGE](https://img.shields.io/npm/v/ffxiv-overlay-api)
-![BADGE](https://img.shields.io/npm/dm/ffxiv-overlay-api)
-![BADGE](https://img.shields.io/npm/l/ffxiv-overlay-api)
+![](https://img.shields.io/github/workflow/status/dsrkafuu/ffxiv-overlay-api/build-test)
+![](https://img.shields.io/npm/v/ffxiv-overlay-api)
+![](https://img.shields.io/npm/dm/ffxiv-overlay-api)
+[![](https://img.shields.io/npm/l/ffxiv-overlay-api)](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/LICENSE)
+[![](https://img.shields.io/lgtm/grade/javascript/github/dsrkafuu/ffxiv-overlay-api)](https://lgtm.com/projects/g/dsrkafuu/ffxiv-overlay-api/context:javascript)
 
 Build your own modern FFXIV overlay with npm & TypeScript support.
 
