@@ -151,37 +151,47 @@ class OverlayAPI {
     if (!url.includes('/ws')) {
       url += (url.endsWith('/') ? '' : '/') + 'ws';
     }
-    this._ws = new WebSocket(url);
-    // log error
-    this._ws.addEventListener('error', (e) => {
-      logError(e);
-    });
-    // successfully connected WebSocket
-    this._ws.addEventListener('open', () => {
-      this._status = true;
-      // send all messages in queue to OverlayPlugin
-      for (const { msg } of this._queue) {
-        this._sendMessage(msg);
-      }
-      logInfo('websocket mode api ready');
-    });
-    // on message loaded from WebSocket
-    this._ws.addEventListener('message', (msg) => {
-      let data: EventData;
-      try {
-        data = JSON.parse(msg.data) as EventData;
-      } catch (e) {
-        logError(e, msg);
-        return;
-      }
-      // `common.js` L44
-      if (data.rseq !== undefined && this._responsePromises[data.rseq]) {
-        this._responsePromises[data.rseq](data);
-        delete this._responsePromises[data.rseq];
-      } else {
-        this._triggerEvents(data);
-      }
-    });
+    // check & init or reinit websocket
+    const _doInit = () => {
+      this._ws = new WebSocket(url);
+      // log error & retry after 1s
+      this._ws.addEventListener('error', () => {
+        try {
+          this._ws && this._ws.close();
+          // eslint-disable-next-line no-empty
+        } catch {}
+        setTimeout(() => {
+          _doInit();
+        }, 1000);
+      });
+      // successfully connected WebSocket
+      this._ws.addEventListener('open', () => {
+        this._status = true;
+        // send all messages in queue to OverlayPlugin
+        for (const { msg } of this._queue) {
+          this._sendMessage(msg);
+        }
+        logInfo('websocket mode api ready');
+      });
+      // on message loaded from WebSocket
+      this._ws.addEventListener('message', (msg) => {
+        let data: EventData;
+        try {
+          data = JSON.parse(msg.data) as EventData;
+        } catch (e) {
+          logError(e, msg);
+          return;
+        }
+        // `common.js` L44
+        if (data.rseq !== undefined && this._responsePromises[data.rseq]) {
+          this._responsePromises[data.rseq](data);
+          delete this._responsePromises[data.rseq];
+        } else {
+          this._triggerEvents(data);
+        }
+      });
+    };
+    _doInit();
   }
 
   /**
@@ -189,7 +199,7 @@ class OverlayAPI {
    * init api in callback mode
    */
   private _initCB() {
-    // if CEF environment not ready
+    // if CEF environment not ready retry after 1s
     if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
       setTimeout(() => {
         this._initCB();
