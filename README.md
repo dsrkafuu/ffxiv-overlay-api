@@ -20,6 +20,10 @@ This library needs to be used along with [ngld/OverlayPlugin](https://github.com
 - [Contributon](#contributon)
 - [Annotations](#annotations)
 
+## Browser Support
+
+Chrome (Chromium) >= 90, Firefox >= 90, Safari >= 14
+
 ## Installation
 
 You can install it from [npm registry](https://www.npmjs.com/package/ffxiv-overlay-api):
