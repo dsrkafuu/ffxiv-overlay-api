@@ -1,5 +1,5 @@
 function isCEFSharp() {
-  return Boolean(window.OverlayPluginApi);
+  return !!window.OverlayPluginApi;
 }
 
 export default isCEFSharp;

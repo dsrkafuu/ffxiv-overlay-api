@@ -201,7 +201,7 @@ function injectExtendData(data: EventData): EventData {
   if (data.type === 'CombatData') {
     // common data
     const parsedData: ExtendData = {
-      isActive: data.isActive === 'true' || data.isActive === true,
+      active: data.isActive === 'true' || data.isActive === true,
       encounter: parseEncounter(data.Encounter),
       combatant: [],
     };

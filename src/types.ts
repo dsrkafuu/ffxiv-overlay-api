@@ -60,7 +60,7 @@ export interface CombatantData {
 }
 
 export interface ExtendData {
-  isActive: boolean;
+  active: boolean;
   encounter: EncounterData;
   combatant: CombatantData[];
   limitBreak?: LimitBreakData;
