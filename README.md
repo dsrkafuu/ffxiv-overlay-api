@@ -32,10 +32,12 @@ You can install it from [npm registry](https://www.npmjs.com/package/ffxiv-overl
 npm install ffxiv-overlay-api --save
 ```
 
-Or import the library from jsDelivr CDN:
+Or import the library from CDNs:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4/lib/overlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.4.0/lib/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.4.0/lib/overlay.min.js"></script>
+<script src="https://unpkg.com/ffxiv-overlay-api@4.4.0/lib/overlay.min.js"></script>
 <script>
   const overlay = new window.OverlayAPI();
 </script>
@@ -132,13 +134,25 @@ This function allows you to call an overlay handler, these handlers are declared
 
 simulate triggering event once
 
-### `OverlayAPI.mergeCombatant`
+### `mergeCombatant` (direct export)
 
 `mergeCombatant(...args: CombatantData[]): CombatantData | null;`
 
 static function for merging combatant like pets into first player arg
 
-### `OverlayAPI.isCEFSharp`
+### `class2job` (direct export)
+
+`class2job(baseClass: string): string;`
+
+convert base class to job or return input base class if not found
+
+### `job2class` (direct export)
+
+`job2class(job: string): string;`
+
+convert job to base class or return input job if not found
+
+### `isCEFSharp` (direct export)
 
 `isCEFSharp(): boolean;`
 

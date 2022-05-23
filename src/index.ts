@@ -9,8 +9,9 @@ window.OverlayAPI = OverlayAPI;
 export { OverlayAPI };
 export default OverlayAPI;
 
-export { default as mergeCombatant } from './modules/mergeCombatant';
 export { default as isCEFSharp } from './modules/isCEFSharp';
+export { class2job, job2class } from './modules/jobClassConversion';
+export { default as mergeCombatant } from './modules/mergeCombatant';
 
 export type {
   JobType,
