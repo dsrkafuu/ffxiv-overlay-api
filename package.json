@@ -1,4 +1,7 @@
 {
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "name": "ffxiv-overlay-api",
   "version": "4.4.0",
   "description": "Build your own modern FFXIV overlay with npm & TypeScript support.",
