@@ -5,7 +5,6 @@
 
 import OverlayAPI from './overlay';
 
-window.OverlayAPI = OverlayAPI;
 export { OverlayAPI };
 export default OverlayAPI;
 

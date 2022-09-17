@@ -24,39 +24,43 @@
       <h4>Data received:</h4>
       <div id="data"></div>
     </main>
-    <script src="../lib/overlay.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/json-formatter-js@2.3.4/dist/json-formatter.umd.min.js"
+    ></script>
     <script>
-      // init api
-      const overlay = new OverlayAPI({
-        extendData: true,
-        silentMode: false,
-      });
-      // add listener
-      overlay.addListener('ChangeZone', (data) => {
-        console.log('new listener of ChangeZone', data);
-      });
-      // list `ChangeZone` listeners
-      console.log(overlay.getAllListener('ChangeZone'));
-      // remove unused listeners
-      overlay.removeAllListener('ChangeZone');
-
-      // add listener to display
-      overlay.addListener('CombatData', (data) => {
-        if (document.getElementById('data').childNodes.length > 0) {
-          document.getElementById('data').innerHTML = '';
-        }
-        let formatter = new JSONFormatter(data, 3);
-        document.getElementById('data').appendChild(formatter.render());
-      });
-      overlay.startEvent();
-
-      // pass some fake data for development simulation
-      fetch('./fake.json')
-        .then((res) => res.json())
-        .then((obj) => {
-          overlay.simulateData(obj);
+      window.addEventListener('DOMContentLoaded', () => {
+        // init api
+        const overlay = new OverlayAPI({
+          extendData: true,
+          silentMode: false,
         });
+        // add listener
+        overlay.addListener('ChangeZone', (data) => {
+          console.log('new listener of ChangeZone', data);
+        });
+        // list `ChangeZone` listeners
+        console.log(overlay.getAllListener('ChangeZone'));
+        // remove unused listeners
+        overlay.removeAllListener('ChangeZone');
+
+        // add listener to display
+        overlay.addListener('CombatData', (data) => {
+          if (document.getElementById('data').childNodes.length > 0) {
+            document.getElementById('data').innerHTML = '';
+          }
+          let formatter = new JSONFormatter(data, 3);
+          document.getElementById('data').appendChild(formatter.render());
+        });
+        overlay.startEvent();
+
+        // pass some fake data for development simulation
+        fetch('./fake.json')
+          .then((res) => res.json())
+          .then((obj) => {
+            overlay.simulateData(obj);
+          });
+      });
     </script>
   </body>
 </html>
