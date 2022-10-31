@@ -1,5 +1,6 @@
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const typescript = require('@rollup/plugin-typescript');
+const terser = require('@rollup/plugin-terser');
 
 const name = 'OverlayAPI';
 const input = './src/index.ts';
@@ -36,7 +37,7 @@ const cdn = {
     name,
     sourcemap: true,
   },
-  plugins: [nodeResolve(), typescript()],
+  plugins: [nodeResolve(), typescript(), terser()],
 };
 
 module.exports = [umd, esm, cdn];

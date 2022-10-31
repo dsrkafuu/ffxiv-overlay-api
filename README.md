@@ -33,9 +33,9 @@ npm install ffxiv-overlay-api --save
 Or import the library from CDNs:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.6.1/overlay.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.6.1/lib/overlay.min.js"></script>
-<script src="https://unpkg.com/ffxiv-overlay-api@4.6.1/lib/overlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.6.2/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.6.2/lib/overlay.min.js"></script>
+<script src="https://unpkg.com/ffxiv-overlay-api@4.6.2/lib/overlay.min.js"></script>
 <script>
   const overlay = new OverlayAPI();
 </script>
