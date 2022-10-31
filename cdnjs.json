@@ -23,7 +23,7 @@
         "files": ["*.js?(.map)", "**/*.d.ts"]
       },
       {
-        "basePath": "test",
+        "basePath": "docs",
         "files": ["*.json"]
       }
     ]
