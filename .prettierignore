@@ -1,4 +1,7 @@
+docs/**
+!docs/*.json
 lib/
 node_modules/
-package-lock.json
-pnpm-lock.yaml
+.DS_Store
+*-lock.*
+*.lock

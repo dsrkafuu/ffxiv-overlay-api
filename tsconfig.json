@@ -1,20 +1,11 @@
 {
+  "extends": "@dsrca/config",
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "declaration": true,
+    "target": "ES2021",
+    "noEmit": false,
     "emitDeclarationOnly": true,
-    "declarationDir": "./lib"
+    "outDir": "./lib"
   },
-  "include": ["./src"],
-  "exclude": ["./src/common.js"]
+  "exclude": ["node_modules"],
+  "include": ["./src"]
 }

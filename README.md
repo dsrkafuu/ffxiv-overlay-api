@@ -1,10 +1,8 @@
 # 🗡 ffxiv-overlay-api 🛡
 
-![](https://img.shields.io/github/workflow/status/dsrkafuu/ffxiv-overlay-api/build-test)
-![](https://img.shields.io/npm/v/ffxiv-overlay-api)
-![](https://img.shields.io/npm/dm/ffxiv-overlay-api)
-[![](https://img.shields.io/npm/l/ffxiv-overlay-api)](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/LICENSE)
-[![](https://img.shields.io/lgtm/grade/javascript/github/dsrkafuu/ffxiv-overlay-api)](https://lgtm.com/projects/g/dsrkafuu/ffxiv-overlay-api/context:javascript)
+[![NPM](https://img.shields.io/npm/v/ffxiv-overlay-api)](https://www.npmjs.com/package/ffxiv-overlay-api)
+[![License](https://img.shields.io/github/license/dsrkafuu/ffxiv-overlay-api)](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/LICENSE)
+[![LGTM](https://img.shields.io/lgtm/grade/javascript/github/dsrkafuu/ffxiv-overlay-api)](https://lgtm.com/projects/g/dsrkafuu/ffxiv-overlay-api/context:javascript)
 
 Build your own modern FFXIV overlay with npm & TypeScript support.
 
@@ -35,9 +33,9 @@ npm install ffxiv-overlay-api --save
 Or import the library from CDNs:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.4.0/overlay.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.4.0/lib/overlay.min.js"></script>
-<script src="https://unpkg.com/ffxiv-overlay-api@4.4.0/lib/overlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.6.0/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.6.0/lib/overlay.min.js"></script>
+<script src="https://unpkg.com/ffxiv-overlay-api@4.6.0/lib/overlay.min.js"></script>
 <script>
   const overlay = new window.OverlayAPI();
 </script>
@@ -48,8 +46,7 @@ Or import the library from CDNs:
 After installation, you can import the library:
 
 ```js
-import OverlayAPI from 'ffxiv-overlay-api';
-import { OverlayAPI } from 'ffxiv-overlay-api'; // also works
+import { OverlayAPI } from 'ffxiv-overlay-api';
 const overlay = new OverlayAPI();
 
 // use static tool functions directly

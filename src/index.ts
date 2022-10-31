@@ -5,9 +5,11 @@
 
 import OverlayAPI from './overlay';
 
-export { OverlayAPI };
-export default OverlayAPI;
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  window.OverlayAPI = OverlayAPI;
+}
 
+export { OverlayAPI };
 export { default as isCEFSharp } from './modules/isCEFSharp';
 export { class2job, job2class } from './modules/jobClassConversion';
 export { default as mergeCombatant } from './modules/mergeCombatant';
