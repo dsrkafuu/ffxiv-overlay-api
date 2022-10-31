@@ -2,7 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/ffxiv-overlay-api)](https://www.npmjs.com/package/ffxiv-overlay-api)
 [![License](https://img.shields.io/github/license/dsrkafuu/ffxiv-overlay-api)](https://github.com/dsrkafuu/ffxiv-overlay-api/blob/master/LICENSE)
-[![LGTM](https://img.shields.io/lgtm/grade/javascript/github/dsrkafuu/ffxiv-overlay-api)](https://lgtm.com/projects/g/dsrkafuu/ffxiv-overlay-api/context:javascript)
+[![Codacy](https://img.shields.io/codacy/grade/5782ea1fafd648e7951edc0260123594)](https://www.codacy.com/gh/dsrkafuu/ffxiv-overlay-api/dashboard)
 
 Build your own modern FFXIV overlay with npm & TypeScript support.
 
@@ -33,11 +33,11 @@ npm install ffxiv-overlay-api --save
 Or import the library from CDNs:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.6.0/overlay.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.6.0/lib/overlay.min.js"></script>
-<script src="https://unpkg.com/ffxiv-overlay-api@4.6.0/lib/overlay.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffxiv-overlay-api/4.6.1/overlay.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ffxiv-overlay-api@4.6.1/lib/overlay.min.js"></script>
+<script src="https://unpkg.com/ffxiv-overlay-api@4.6.1/lib/overlay.min.js"></script>
 <script>
-  const overlay = new window.OverlayAPI();
+  const overlay = new OverlayAPI();
 </script>
 ```
 
