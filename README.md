@@ -18,9 +18,13 @@ This library needs to be used along with [ngld/OverlayPlugin](https://github.com
 - [Contributon](#contributon)
 - [Annotations](#annotations)
 
-## Browser Support
+## Browsers Support
 
-Chrome (Chromium) >= 90, Firefox >= 90, Safari >= 14
+Supports major browser versions released at 2020 or `ES2020`.
+
+- Chrome: >=87
+- Firefox: >=78
+- Safari: >=14
 
 ## Installation
 

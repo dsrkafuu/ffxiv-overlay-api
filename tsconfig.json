@@ -1,7 +1,6 @@
 {
   "extends": "@dsrca/config",
   "compilerOptions": {
-    "target": "ES2021",
     "noEmit": false,
     "emitDeclarationOnly": true,
     "outDir": "./lib"
