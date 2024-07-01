@@ -28,10 +28,12 @@ function parseJob(jobName: string): { name: string; type: JobType } {
     'nin',
     'sam',
     'rpr',
+    'vpr',
     // magical ranged
     'smn',
     'blm',
     'rdm',
+    'pct',
     // physical ranged
     'brd',
     'mch',
